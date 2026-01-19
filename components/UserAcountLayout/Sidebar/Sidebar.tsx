@@ -1,5 +1,8 @@
-const ComponentName = () => {
-  return <div>ComponentName</div>;
-};
+export default function Sidebar() {
+  return (
+    <aside>
+      Sidebar
+    </aside>
+  );
+}
 
-export default ComponentName;

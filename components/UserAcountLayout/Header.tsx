@@ -1,5 +1,7 @@
-const ComponentName = () => {
-  return <div>ComponentName</div>;
-};
-
-export default ComponentName;
+export default function Header() {
+  return (
+    <header>
+      Header
+    </header>
+  );
+}

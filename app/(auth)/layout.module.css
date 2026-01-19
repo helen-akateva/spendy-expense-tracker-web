@@ -1,0 +1,7 @@
+.wrapper {
+    min-height: 100vh;
+    background: linear-gradient(180deg, #294045 0%, #1e2f33 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
