@@ -1,3 +1,5 @@
+@import "modern-normalize/modern-normalize.css";
+@import "react-datepicker/dist/react-datepicker.css";
 :root {
   /* base colors */
   --main-black: #081222;
@@ -18,15 +20,17 @@
   --chart-light-purple: #c5baff;
   --chart-red: #fd9498;
 
-    /* backgrounds */
-      --app-background: linear-gradient(180deg,
-          #294045 0%,
-          #1e2f33 100%);
+  /* backgrounds */
+  --app-background: linear-gradient(180deg, #294045 0%, #1e2f33 100%);
 
   /* fonts */
-  --font-main: 'Inter', sans-serif;
-  --font-secondary: 'Poppins', sans-serif;
-  --font-third: 'Circe', sans-serif;
+  --font-family: "Inter", sans-serif;
+  --second-family: "Poppins", sans-serif;
+
+    /* Z-index */
+      --z-dropdown: 1000;
+      --z-modal: 1100;
+      --z-tooltip: 1200;
 }
 html,
 body {
@@ -37,7 +41,7 @@ body {
 body {
   color: var(--main-black);
   background: var(--app-background);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: "Inter", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -53,8 +57,74 @@ a {
   text-decoration: none;
 }
 
-@media (prefers-color-scheme: dark) {
-  html {
-    color-scheme: dark;
+button {
+  font-family: inherit;
+  cursor: pointer;
+  border: none;
+  outline: none;
+  background: none;
+}
+
+input,
+textarea,
+select {
+  font-family: inherit;
+  outline: none;
+}
+
+ul,
+ol {
+  list-style: none;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Styles for Mobile devices */
+.container {
+  min-width: 320px;
+  max-width: 375px;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+
+/* Styles for Tablet devices */
+
+@media only screen and (max-width: 374px) {
+  .container {
+    max-width: 100%;
   }
+}
+
+@media only screen and (min-width: 768px) {
+  .container {
+    max-width: 768px;
+    padding: 0 32px;
+  }
+}
+
+/* Styles for Desktop devices */
+@media only screen and (min-width: 1280px) {
+  .container {
+    max-width: 1280px;
+    padding: 0 24px;
+  }
+
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  border: 0;
+  padding: 0;
+  white-space: nowrap;
+  clip-path: inset(100%);
+  clip: rect(0 0 0 0);
+  overflow: hidden;
 }
