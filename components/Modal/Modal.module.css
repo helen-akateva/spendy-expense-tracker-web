@@ -1,0 +1,81 @@
+.backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 50;
+  animation: fadeIn 0.25s ease forwards;
+
+  width: 100vw;
+  height: 100vh;
+  backdrop-filter: blur(7px);
+
+  opacity: 0.4;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal {
+  position: relative;
+  max-width: 90vw;
+  max-height: 90vh;
+  width: 100%;
+  border-radius: 8px;
+  background-color: #508f8c;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  animation: popUp 0.3s ease forwards;
+}
+
+@media only screen and (min-width: 768px) {
+  .modal {
+    max-width: 540px;
+  }
+}
+
+.modalContent {
+  overflow: auto;
+  flex: 1;
+}
+
+.closeButton {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  border: none;
+  border-radius: 100%;
+  width: 16px;
+  height: 16px;
+  font-size: 30px;
+  line-height: 1;
+  color: #333;
+  cursor: pointer;
+  background: none;
+}
+
+@media only screen and (min-width: 768px) {
+  .closeButton {
+    right: 32px;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes popUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}

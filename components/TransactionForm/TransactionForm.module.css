@@ -1,0 +1,102 @@
+:global(.react-datepicker-wrapper) {
+  width: 100%;
+}
+
+:global(.react-datepicker__input-container) {
+  width: 100%;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  max-width: 271px;
+  margin: 0 auto;
+}
+@media only screen and (min-width: 768px) {
+  .form {
+    max-width: 410px;
+  }
+}
+
+.formGrop {
+  width: 100%;
+  padding-bottom: 12px;
+  position: relative;
+}
+
+.input {
+  width: 100%;
+  padding: 11px 14px;
+  font-weight: 500;
+  font-size: 18px;
+  background-color: #508f8c;
+  border: 1px solid #081222;
+  border-radius: 8px;
+  outline: none;
+  cursor: pointer;
+}
+@media only screen and (min-width: 768px) {
+  .fixedWidth {
+    width: 193px;
+  }
+}
+
+.fixedWidthGrop {
+  width: 100%;
+}
+
+@media only screen and (min-width: 768px) {
+  .fixedWidthGrop {
+    display: flex;
+    flex-direction: row;
+    gap: 24px;
+  }
+}
+
+.input::placeholder {
+  color: #3b5d63;
+}
+
+/* ❌ помилка */
+.inputError {
+  border: 1px solid #b20202;
+}
+
+/* ✅ валідне поле */
+.inputSuccess {
+  border: 1px solid #0b6016;
+}
+
+/* текст помилки */
+.errorText {
+  padding-top: 4px;
+  color: #b20202;
+}
+
+.buttonSubmit {
+  width: 100%;
+  padding: 11px 14px;
+  font-weight: 500;
+  font-size: 18px;
+
+  background: linear-gradient(180deg, #355359 0%, #3b5d63 100%);
+  color: #fcfcfc;
+  border: 1px solid #355359;
+  border-radius: 8px;
+  outline: none;
+  cursor: pointer;
+}
+
+.iconButton {
+  background-color: #508f8c;
+  position: absolute;
+  right: 14px;
+  top: 40%;
+  transform: translateY(-50%);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+}
