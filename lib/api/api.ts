@@ -8,9 +8,9 @@ const API_URL =
   "http://localhost:3001";
 
 export const nextApi = axios.create({
-  baseURL: API_URL,
-    withCredentials: true,
-   headers: {
+  baseURL: API_URL + "/api",
+  withCredentials: true,
+  headers: {
     "Content-Type": "application/json",
   },
 });
