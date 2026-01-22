@@ -1,3 +1,9 @@
+import StatisticsTab from "@/components/StatisticsTab/StatisticsTab";
+
 export default function StatisticsPage() {
-  return <div>Statistics Page</div>;
+  return (
+    <section>
+      <StatisticsTab />
+    </section>
+  );
 }
