@@ -8,7 +8,7 @@ export const authApi = {
     name: string;
   }): Promise<UserData> => {
     const response = await nextApi.post<UserData>(
-      "/auth/register",
+      "/api/auth/register",
       payload,
     );
 
@@ -19,17 +19,17 @@ export const authApi = {
     email: string;
     password: string;
   }): Promise<UserData> => {
-    const response = await nextApi.post<UserData>("/auth/login", payload);
+    const response = await nextApi.post<UserData>("/api/auth/login", payload);
 
     return response.data;
   },
 
   logout: async (): Promise<void> => {
-    await nextApi.post("/auth/logout");
+    await nextApi.post("api/auth/logout");
   },
 
   refresh: async (): Promise<UserData> => {
-    const response = await nextApi.post<UserData>("/auth/refresh");
+    const response = await nextApi.post<UserData>("api/auth/refresh");
     return response.data;
   },
 };
