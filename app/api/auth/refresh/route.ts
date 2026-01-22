@@ -2,7 +2,8 @@ import axios from "axios";
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 
-// export const runtime = "nodejs";
+export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
 
 const BACKEND_URL = process.env.NEXT_PUBLIC_API_BASE_URL!;
 
