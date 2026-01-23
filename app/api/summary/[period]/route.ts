@@ -3,10 +3,11 @@ import { spendiApi } from "../../api";
 import { cookies } from "next/headers";
 import { AxiosError } from "axios";
 
-export async function GET(
-  req: Request,
-  { params }: { params: { period: string } },
-) {
+type Props = {
+  params: Promise<{ period: string }>;
+};
+
+export async function GET(req: Request, { params }: Props) {
   const cookieStore = await cookies();
   const { period } = await params;
   console.log("Proxy GET /summary/", period);
