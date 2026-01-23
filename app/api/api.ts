@@ -2,7 +2,10 @@ import axios, { AxiosError } from "axios";
 
 export type ApiError = AxiosError<{ error: string }>;
 
-export const spendyApi = axios.create({
-  baseURL: process.env.BACKEND_API_URL,
+const BACKEND_URL = process.env.API_BASE_URL;
+
+export const spendiApi = axios.create({
+  baseURL: BACKEND_URL,
   withCredentials: true,
+  headers: { "Content-Type": "application/json" },
 });

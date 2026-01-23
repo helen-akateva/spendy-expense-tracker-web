@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { spendyApi } from "../../api";
+import { spendiApi } from "../../api";
 import { cookies } from "next/headers";
 import { AxiosError } from "axios";
 
@@ -11,7 +11,7 @@ export async function GET(
   const { period } = await params;
   console.log("Proxy GET /summary/", period);
   try {
-    const response = await spendyApi.get(`/summary/${period}`, {
+    const response = await spendiApi.get(`/summary/${period}`, {
       headers: {
         Cookie: cookieStore.toString(),
       },
