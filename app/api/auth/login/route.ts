@@ -1,41 +1,51 @@
-import axios from "axios";
 import { NextRequest, NextResponse } from "next/server";
-
-export const runtime = "nodejs";
-export const dynamic = "force-dynamic";
-
-const BACKEND_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+import { isAxiosError } from "axios";
+import { cookies } from "next/headers";
+import { parse } from "cookie";
+import { spendiApi } from "../../api";
 
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
 
-    const { data, headers } = await axios.post(
-      `${BACKEND_URL}/auth/login`,
-      body,
-      {
-        withCredentials: true,
-      },
-    );
+    const apiRes = await spendiApi.post("/auth/login", body);
 
-    const response = NextResponse.json(
-      {
-        id: data._id || data.id,
-        email: data.email,
-        name: data.name,
-        balance: data.balance ?? 0,
-      },
-      { status: 200 },
-    );
+    const cookieStore = await cookies();
+    const setCookie = apiRes.headers["set-cookie"];
 
-    const setCookie = headers["set-cookie"];
     if (setCookie) {
-      response.headers.set("set-cookie", setCookie.join(","));
+      const cookieArray = Array.isArray(setCookie) ? setCookie : [setCookie];
+
+      for (const cookieStr of cookieArray) {
+        const parsed = parse(cookieStr);
+
+        const options = {
+          expires: parsed.Expires ? new Date(parsed.Expires) : undefined,
+          path: parsed.Path ?? "/",
+          maxAge: parsed["Max-Age"] ? Number(parsed["Max-Age"]) : undefined,
+        };
+
+        if (parsed.accessToken) {
+          cookieStore.set("accessToken", parsed.accessToken, options);
+        }
+
+        if (parsed.refreshToken) {
+          cookieStore.set("refreshToken", parsed.refreshToken, options);
+        }
+
+        if (parsed.sessionId) {
+          cookieStore.set("sessionId", parsed.sessionId, options);
+        }
+      }
+
+      return NextResponse.json(apiRes.data, {
+        status: apiRes.status,
+      });
     }
 
-    return response;
+    return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
   } catch (error) {
-    if (axios.isAxiosError(error)) {
+    if (isAxiosError(error)) {
       return NextResponse.json(
         {
           message:
@@ -44,10 +54,10 @@ export async function POST(req: NextRequest) {
         { status: error.response?.status || 500 },
       );
     }
-  }
 
-  return NextResponse.json(
-    { message: "Internal server error" },
-    { status: 500 },
-  );
+    return NextResponse.json(
+      { message: "Internal Server Error" },
+      { status: 500 },
+    );
+  }
 }

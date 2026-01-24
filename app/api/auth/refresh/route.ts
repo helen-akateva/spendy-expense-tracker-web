@@ -1,48 +1,70 @@
-import axios from "axios";
 import { NextResponse } from "next/server";
-
-export const runtime = "nodejs";
-export const dynamic = "force-dynamic";
-
-const BACKEND_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
-
-async function handleRefresh() {
-  const { data, headers } = await axios.post(
-    `${BACKEND_URL}/auth/refresh`,
-    {},
-    { withCredentials: true },
-  );
-
-  const response = NextResponse.json(
-    {
-      id: data._id || data.id,
-      email: data.email,
-      name: data.name,
-      balance: data.balance ?? 0,
-    },
-    { status: 200 },
-  );
-
-  const setCookie = headers["set-cookie"];
-  if (setCookie) {
-    response.headers.set("set-cookie", setCookie.join(","));
-  }
-
-  return response;
-}
+import { isAxiosError } from "axios";
+import { cookies } from "next/headers";
+import { parse } from "cookie";
+import { spendiApi } from "../../api";
 
 export async function POST() {
   try {
-    return await handleRefresh();
-  } catch {
-    return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
-  }
-}
+    const cookieStore = await cookies();
 
-export async function GET() {
-  try {
-    return await handleRefresh();
-  } catch {
-    return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+    const accessToken = cookieStore.get("accessToken")?.value;
+    const refreshToken = cookieStore.get("refreshToken")?.value;
+
+    if (accessToken) {
+      return NextResponse.json({ success: true }, { status: 200 });
+    }
+
+    if (!refreshToken) {
+      return NextResponse.json({ success: false }, { status: 200 });
+    }
+
+    const apiRes = await spendiApi.post(
+      "/auth/refresh",
+      {},
+      {
+        headers: {
+          Cookie: cookieStore.toString(),
+        },
+      },
+    );
+
+    const setCookie = apiRes.headers["set-cookie"];
+
+    if (setCookie) {
+      const cookieArray = Array.isArray(setCookie) ? setCookie : [setCookie];
+
+      for (const cookieStr of cookieArray) {
+        const parsed = parse(cookieStr);
+
+        const options = {
+          expires: parsed.Expires ? new Date(parsed.Expires) : undefined,
+          path: parsed.Path ?? "/",
+          maxAge: parsed["Max-Age"] ? Number(parsed["Max-Age"]) : undefined,
+        };
+
+        if (parsed.accessToken) {
+          cookieStore.set("accessToken", parsed.accessToken, options);
+        }
+
+        if (parsed.refreshToken) {
+          cookieStore.set("refreshToken", parsed.refreshToken, options);
+        }
+
+        if (parsed.sessionId) {
+          cookieStore.set("sessionId", parsed.sessionId, options);
+        }
+      }
+
+      return NextResponse.json({ success: true }, { status: 200 });
+    }
+
+    return NextResponse.json({ success: false }, { status: 200 });
+  } catch (error) {
+    if (isAxiosError(error)) {
+      return NextResponse.json({ success: false }, { status: 200 });
+    }
+
+    return NextResponse.json({ success: false }, { status: 200 });
   }
 }

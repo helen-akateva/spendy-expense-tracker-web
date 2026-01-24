@@ -8,6 +8,7 @@ import { useAuthStore } from "@/lib/store/authStore";
 import { registerValidationSchema } from "@/lib/validations/registerSchema";
 import { authApi } from "@/lib/services/authService";
 import { Loader } from "@/components/Loader/Loader";
+import { useAuthFormStore } from "@/lib/store/authFormStore";
 
 interface RegisterFormValues {
   name: string;
@@ -15,13 +16,6 @@ interface RegisterFormValues {
   password: string;
   confirmPassword: string;
 }
-
-const initialValues: RegisterFormValues = {
-  name: "",
-  email: "",
-  password: "",
-  confirmPassword: "",
-};
 
 const calculatePasswordStrength = (password: string) => {
   let strength = 0;
@@ -37,6 +31,15 @@ export default function RegistrationForm() {
   const router = useRouter();
   const setUser = useAuthStore((state) => state.setUser);
 
+  const { name, email, setEmail, setName, clear } = useAuthFormStore();
+
+  const initialValues: RegisterFormValues = {
+    name: name || "",
+    email: email || "",
+    password: "",
+    confirmPassword: "",
+  };
+
   const handleSubmit = async (
     values: RegisterFormValues,
     { setSubmitting }: { setSubmitting: (value: boolean) => void },
@@ -47,8 +50,9 @@ export default function RegistrationForm() {
       const user = await authApi.register(payload);
 
       setUser(user);
-      toast.success("Account created successfully 🎉");
+      clear();
 
+      toast.success("Account created successfully 🎉");
       router.replace("/dashboard");
     } catch (error) {
       toast.error(
@@ -65,8 +69,9 @@ export default function RegistrationForm() {
         initialValues={initialValues}
         validationSchema={registerValidationSchema}
         onSubmit={handleSubmit}
+        enableReinitialize
       >
-        {({ isSubmitting, values }) => {
+        {({ isSubmitting, values, setFieldValue }) => {
           const passwordStrength = calculatePasswordStrength(values.password);
 
           return (
@@ -84,12 +89,19 @@ export default function RegistrationForm() {
 
               <div className={css.formwrapper}>
                 <div className={css.fieldwrapper}>
+                  <svg width="24" height="24" className={css.imginput}>
+                    <use href="/sprite.svg#icon-user" />
+                  </svg>
                   <Field
                     name="name"
                     type="text"
                     placeholder="Name"
                     className={css.inputfield}
                     disabled={isSubmitting}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                      setFieldValue("name", e.target.value);
+                      setName(e.target.value);
+                    }}
                   />
                   <ErrorMessage
                     name="name"
@@ -99,12 +111,19 @@ export default function RegistrationForm() {
                 </div>
 
                 <div className={css.fieldwrapper}>
+                  <svg width="24" height="24" className={css.imginput}>
+                    <use href="/sprite.svg#icon-email" />
+                  </svg>
                   <Field
                     name="email"
                     type="email"
                     placeholder="Email"
                     className={css.inputfield}
                     disabled={isSubmitting}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                      setFieldValue("email", e.target.value);
+                      setEmail(e.target.value);
+                    }}
                   />
                   <ErrorMessage
                     name="email"
@@ -114,6 +133,9 @@ export default function RegistrationForm() {
                 </div>
 
                 <div className={css.fieldwrapper}>
+                  <svg width="24" height="24" className={css.imginput}>
+                    <use href="/sprite.svg#icon-lock" />
+                  </svg>
                   <Field
                     name="password"
                     type="password"
@@ -147,6 +169,9 @@ export default function RegistrationForm() {
                 </div>
 
                 <div className={css.fieldwrapper}>
+                  <svg width="24" height="24" className={css.imginput}>
+                    <use href="/sprite.svg#icon-lock" />
+                  </svg>
                   <Field
                     name="confirmPassword"
                     type="password"
