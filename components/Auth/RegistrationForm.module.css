@@ -3,7 +3,7 @@
   padding: 16px;
   width: 100%;
   min-width: 288px;
-  height: 516px;
+  min-height: 516px;
   background: #508f8c;
   margin: 0 auto;
 }
@@ -32,7 +32,20 @@
 
 .fieldwrapper {
   position: relative;
-  margin-bottom: 16px;
+  min-height: 60px;
+  margin-bottom: 0;
+}
+
+.fieldwrapper:last-of-type {
+  margin-bottom: 0;
+}
+
+.imginput {
+  position: absolute;
+  left: 14px;
+  top: 10px;
+  pointer-events: none;
+  fill: currentColor;
 }
 
 .fieldwrapper:last-of-type {
@@ -42,25 +55,43 @@
 .inputfield {
   border: 1px solid #081222;
   border-radius: 8px;
-  padding: 10px 14px;
+  padding: 10px 14px 10px 50px;
   width: 100%;
   min-width: 256px;
   height: 44px;
-
   background: #508f8c;
+  outline: none;
+  transition:
+    border 0.2s ease,
+    color 0.2s ease;
+}
+
+.inputfield:placeholder-shown {
   font-weight: 500;
   font-size: 18px;
-  color: #081222;
-  transition: border-color 0.2s ease;
+  color: #355359;
+  border: 1px solid #355359;
 }
 
-.inputfield::placeholder {
-  color: rgba(8, 18, 34, 0.6);
+.inputfield::placeholder:hover,
+.inputfield::placeholder:focus {
+  color: #0b6016;
 }
 
+.inputfield:hover,
 .inputfield:focus {
-  outline: none;
-  border-color: #355359;
+  color: #0b6016;
+  border: 1px solid #0b6016;
+}
+
+.inputfield:not(:placeholder-shown):not(:focus) {
+  color: #081222;
+  border: 1px solid #081222;
+}
+
+.inputfield.error {
+  color: #b20202;
+  border: 1px solid #b20202;
 }
 
 .inputfield:disabled {
@@ -69,37 +100,20 @@
 }
 
 .error {
-  color: #ef4444;
-  font-size: 12px;
-  margin-top: 4px;
-  display: block;
-  text-align: left;
-  padding-left: 4px;
-}
+  position: absolute;
+  left: 4px;
+  color: #b20202;
+  font-weight: 400;
+  font-size: 10px;
 
-.progressbarwrapper {
-  width: 100%;
-  max-width: 256px;
-  height: 4px;
-  background: rgba(8, 18, 34, 0.2);
-  border-radius: 2px;
-  margin-top: 4px;
-  overflow: hidden;
-}
-
-.progressbar {
-  height: 100%;
-  transition:
-    width 0.3s ease,
-    background-color 0.3s ease;
-  border-radius: 2px;
+  line-height: 16px;
 }
 
 .btnsubmit {
   border-radius: 8px;
   padding: 11px 79px;
   width: 100%;
-  max-width: 256px;
+  min-width: 256px;
   height: 44px;
   background: linear-gradient(180deg, #355359 0%, #3b5d63 100%);
   border: none;
@@ -109,7 +123,6 @@
   color: #fcfcfc;
   cursor: pointer;
   transition: opacity 0.2s ease;
-  margin-top: 16px;
 }
 
 .btnsubmit:hover:not(:disabled) {
@@ -126,7 +139,7 @@
   border-radius: 8px;
   padding: 11px 68px;
   width: 100%;
-  max-width: 256px;
+  min-width: 256px;
   height: 44px;
   background: #508f8c;
   font-weight: 500;
@@ -161,6 +174,11 @@
   border-radius: 16px;
 }
 
+.imghero {
+  margin-top: 38px;
+  margin-left: 110px;
+}
+
 @media screen and (min-width: 768px) {
   .sectionform {
     max-width: 400px;
@@ -174,13 +192,18 @@
 
   .inputfield,
   .btnsubmit,
-  .btnlogin,
-  .progressbarwrapper {
+  .btnlogin {
     max-width: 336px;
   }
 
   .fieldwrapper {
-    margin-bottom: 20px;
+    min-height: 68px;
+    margin-bottom: 16px;
+  }
+
+  .imghero {
+    width: 190px;
+    height: 142px;
   }
 }
 
@@ -197,12 +220,17 @@
 
   .inputfield,
   .btnsubmit,
-  .btnlogin,
-  .progressbarwrapper {
+  .btnlogin {
     max-width: 370px;
   }
 
   .fieldwrapper {
-    margin-bottom: 24px;
+    min-height: 72px;
+    margin-bottom: 16px;
+  }
+
+  .imghero {
+    width: 220px;
+    height: 165px;
   }
 }

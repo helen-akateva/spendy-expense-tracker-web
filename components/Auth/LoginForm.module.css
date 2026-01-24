@@ -2,10 +2,25 @@
   border-radius: 16px;
   padding: 16px;
   width: 100%;
-  min-width: 288px;
-  height: 528px;
+  min-width: 280px;
+  min-height: 528px;
   background: #508f8c;
   margin: 0 auto;
+}
+
+@media screen and (min-width: 768px) {
+  .sectionform {
+    width: 534px;
+    height: 519px;
+    padding-top: 53px;
+  }
+}
+
+@media screen and (min-width: 1280px) {
+  .sectionform {
+    width: 533px;
+    height: 519px;
+  }
 }
 
 .form {
@@ -23,16 +38,42 @@
   margin-bottom: 16px;
 }
 
+@media screen and (min-width: 768px) {
+  .formtitle {
+    margin-bottom: 37px;
+  }
+}
+
 .formwrapper {
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: 0;
   width: 100%;
 }
 
 .fieldwrapper {
   position: relative;
-  margin-bottom: 16px;
+  min-height: 60px;
+  margin-bottom: 0;
+}
+
+@media screen and (min-width: 768px) {
+  .fieldwrapper {
+    min-height: 68px;
+  }
+}
+
+.fieldwrapper:last-of-type {
+  margin-bottom: 0;
+}
+
+.imginput {
+  position: absolute;
+  left: 14px;
+  top: 10px;
+  pointer-events: none;
+  fill: currentColor;
 }
 
 .fieldwrapper:last-of-type {
@@ -42,30 +83,50 @@
 .inputfield {
   border: 1px solid #081222;
   border-radius: 8px;
-  padding: 10px 14px;
+  padding: 10px 14px 10px 50px;
   width: 100%;
   min-width: 256px;
   height: 44px;
-
   background: #508f8c;
-  transition: border-color 0.2s ease;
+  outline: none;
+  transition:
+    border 0.2s ease,
+    color 0.2s ease;
 }
 
-.inputfield::placeholder {
+@media screen and (min-width: 768px) {
+  .inputfield {
+    width: 409px;
+    height: 44px;
+  }
+}
+
+.inputfield:placeholder-shown {
   font-weight: 500;
   font-size: 18px;
-  color: #081222;
+  color: #355359;
+  border: 1px solid #355359;
 }
 
 .inputfield::placeholder:hover,
 .inputfield::placeholder:focus {
-  color: #355359;
+  color: #0b6016;
 }
 
 .inputfield:hover,
 .inputfield:focus {
-  outline: none;
-  border-color: #355359;
+  color: #0b6016;
+  border: 1px solid #0b6016;
+}
+
+.inputfield:not(:placeholder-shown):not(:focus) {
+  color: #081222;
+  border: 1px solid #081222;
+}
+
+.inputfield.error {
+  color: #b20202;
+  border: 1px solid #b20202;
 }
 
 .inputfield:disabled {
@@ -74,19 +135,21 @@
 }
 
 .error {
+  position: absolute;
+  bottom: 0;
+  left: 4px;
   color: #ef4444;
   font-size: 12px;
-  margin-top: 4px;
-  display: block;
-  text-align: left;
-  padding-left: 4px;
+  margin: 0;
+  min-height: 16px;
+  line-height: 16px;
 }
 
 .btnsubmit {
   border-radius: 8px;
   padding: 11px 79px;
   width: 100%;
-  max-width: 256px; /* уніфіковано з RegistrationForm */
+  min-width: 256px;
   height: 44px;
   background: linear-gradient(180deg, #355359 0%, #3b5d63 100%);
   border: none;
@@ -96,7 +159,13 @@
   color: #fcfcfc;
   cursor: pointer;
   transition: opacity 0.2s ease;
-  margin-top: 16px; /* додано відступ зверху */
+}
+
+@media screen and (min-width: 768px) {
+  .btnsubmit {
+    width: 409px;
+    margin-top: 8px;
+  }
 }
 
 .btnsubmit:hover:not(:disabled) {
@@ -113,7 +182,7 @@
   border-radius: 8px;
   padding: 11px 68px;
   width: 100%;
-  max-width: 256px; /* уніфіковано з RegistrationForm */
+  min-width: 256px;
   height: 44px;
   background: #508f8c;
   font-weight: 500;
@@ -123,6 +192,13 @@
   cursor: pointer;
   transition: background-color 0.2s ease;
   margin-top: 16px;
+}
+
+@media screen and (min-width: 768px) {
+  .btnregister {
+    width: 409px;
+    margin-top: 21px;
+  }
 }
 
 .btnregister:hover:not(:disabled) {
@@ -140,7 +216,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(80, 143, 140, 0.95); /* змінено на колір форми */
+  background: rgba(80, 143, 140, 0.95);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -149,61 +225,13 @@
 }
 
 .imghero {
-  margin-top: 16px;
+  margin-top: 38px;
+  margin-left: 110px;
 }
 
-/* Адаптив для планшета */
 @media screen and (min-width: 768px) {
-  .sectionform {
-    max-width: 400px;
-    padding: 32px;
-  }
-
-  .formtitle {
-    font-size: 36px;
-    margin-bottom: 24px;
-  }
-
-  .inputfield,
-  .btnsubmit,
-  .btnregister {
-    max-width: 336px;
-  }
-
-  .fieldwrapper {
-    margin-bottom: 20px;
-  }
-
   .imghero {
-    width: 190px;
-    height: 142px;
-  }
-}
-
-/* Адаптив для десктопа */
-@media screen and (min-width: 1280px) {
-  .sectionform {
-    max-width: 450px;
-    padding: 40px;
-  }
-
-  .formtitle {
-    font-size: 40px;
-    margin-bottom: 32px;
-  }
-
-  .inputfield,
-  .btnsubmit,
-  .btnregister {
-    max-width: 370px;
-  }
-
-  .fieldwrapper {
-    margin-bottom: 24px;
-  }
-
-  .imghero {
-    width: 220px;
-    height: 165px;
+    width: 320px;
+    height: 239px;
   }
 }

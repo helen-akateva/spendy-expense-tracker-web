@@ -9,20 +9,23 @@ import { useAuthStore } from "@/lib/store/authStore";
 import { loginValidationSchema } from "@/lib/validations/loginSchema";
 import { authApi } from "@/lib/services/authService";
 import { Loader } from "@/components/Loader/Loader";
+import { useAuthFormStore } from "@/lib/store/authFormStore";
 
 interface LoginFormValues {
   email: string;
   password: string;
 }
 
-const initialValues: LoginFormValues = {
-  email: "",
-  password: "",
-};
-
 export default function LoginForm() {
   const router = useRouter();
   const setUser = useAuthStore((state) => state.setUser);
+
+  const { email, setEmail, clear } = useAuthFormStore();
+
+  const initialValues: LoginFormValues = {
+    email,
+    password: "",
+  };
 
   const handleSubmit = async (
     values: LoginFormValues,
@@ -32,6 +35,7 @@ export default function LoginForm() {
       const user = await authApi.login(values);
 
       setUser(user);
+      clear();
       toast.success("Welcome back 👋");
       router.replace("/dashboard");
     } catch (error) {
@@ -47,12 +51,13 @@ export default function LoginForm() {
         initialValues={initialValues}
         validationSchema={loginValidationSchema}
         onSubmit={handleSubmit}
+        enableReinitialize
       >
-        {({ isSubmitting }) => (
+        {({ isSubmitting, setFieldValue }) => (
           <Form noValidate className={css.form}>
             {isSubmitting && (
               <div className={css.loaderOverlay}>
-                <Loader size={60} />
+                <Loader size={80} />
               </div>
             )}
 
@@ -63,6 +68,9 @@ export default function LoginForm() {
 
             <div className={css.formwrapper}>
               <div className={css.fieldwrapper}>
+                <svg width="24" height="24" className={css.imginput}>
+                  <use href="/sprite.svg#icon-email" />
+                </svg>
                 <Field
                   name="email"
                   type="email"
@@ -70,6 +78,10 @@ export default function LoginForm() {
                   className={css.inputfield}
                   placeholder="E-mail"
                   disabled={isSubmitting}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                    setFieldValue("email", e.target.value);
+                    setEmail(e.target.value);
+                  }}
                 />
                 <ErrorMessage
                   name="email"
@@ -79,6 +91,9 @@ export default function LoginForm() {
               </div>
 
               <div className={css.fieldwrapper}>
+                <svg width="24" height="24" className={css.imginput}>
+                  <use href="/sprite.svg#icon-lock" />
+                </svg>
                 <Field
                   name="password"
                   type="password"
@@ -115,7 +130,7 @@ export default function LoginForm() {
               src="/images/dude1x.webp"
               width={158}
               height={118}
-              alt="delete"
+              alt="hero"
               className={css.imghero}
             />
           </Form>

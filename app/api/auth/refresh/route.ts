@@ -1,34 +1,70 @@
 import { NextResponse } from "next/server";
+import { isAxiosError } from "axios";
+import { cookies } from "next/headers";
+import { parse } from "cookie";
 import { spendiApi } from "../../api";
-
-export const runtime = "nodejs";
-export const dynamic = "force-dynamic";
-
-// const BACKEND_URL = process.env.API_BASE_URL;
 
 export async function POST() {
   try {
-    const { data, headers } = await spendiApi.post("/auth/refresh", {});
+    const cookieStore = await cookies();
 
-    const response = NextResponse.json(
-      {
-        id: data._id || data.id,
-        email: data.email,
-        name: data.name,
-        balance: data.balance ?? 0,
-      },
-      { status: 200 },
-    );
+    const accessToken = cookieStore.get("accessToken")?.value;
+    const refreshToken = cookieStore.get("refreshToken")?.value;
 
-    const cookies = headers["set-cookie"];
-    if (cookies) {
-      cookies.forEach((cookie) => {
-        response.headers.append("set-cookie", cookie);
-      });
+    if (accessToken) {
+      return NextResponse.json({ success: true }, { status: 200 });
     }
 
-    return response;
-  } catch {
-    return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+    if (!refreshToken) {
+      return NextResponse.json({ success: false }, { status: 200 });
+    }
+
+    const apiRes = await spendiApi.post(
+      "/auth/refresh",
+      {},
+      {
+        headers: {
+          Cookie: cookieStore.toString(),
+        },
+      },
+    );
+
+    const setCookie = apiRes.headers["set-cookie"];
+
+    if (setCookie) {
+      const cookieArray = Array.isArray(setCookie) ? setCookie : [setCookie];
+
+      for (const cookieStr of cookieArray) {
+        const parsed = parse(cookieStr);
+
+        const options = {
+          expires: parsed.Expires ? new Date(parsed.Expires) : undefined,
+          path: parsed.Path ?? "/",
+          maxAge: parsed["Max-Age"] ? Number(parsed["Max-Age"]) : undefined,
+        };
+
+        if (parsed.accessToken) {
+          cookieStore.set("accessToken", parsed.accessToken, options);
+        }
+
+        if (parsed.refreshToken) {
+          cookieStore.set("refreshToken", parsed.refreshToken, options);
+        }
+
+        if (parsed.sessionId) {
+          cookieStore.set("sessionId", parsed.sessionId, options);
+        }
+      }
+
+      return NextResponse.json({ success: true }, { status: 200 });
+    }
+
+    return NextResponse.json({ success: false }, { status: 200 });
+  } catch (error) {
+    if (isAxiosError(error)) {
+      return NextResponse.json({ success: false }, { status: 200 });
+    }
+
+    return NextResponse.json({ success: false }, { status: 200 });
   }
 }
