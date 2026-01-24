@@ -9,10 +9,7 @@ import ModalDeleteTransaction from "@/components/ModalDeleteTransaction/ModalDel
 
 import TransactionsList from "@/components/HomeTab/TransactionsList";
 import { useQuery } from "@tanstack/react-query";
-import {
-  fetchAllTransactions,
-  TransactionsListResponse,
-} from "@/lib/api/transactions";
+import { fetchAllTransactions } from "@/lib/api/transactions";
 
 export type ModalType = "add" | "edit" | "delete" | null;
 
