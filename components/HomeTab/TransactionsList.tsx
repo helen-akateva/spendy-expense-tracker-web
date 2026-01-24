@@ -1,4 +1,4 @@
-import { ModalType } from "@/app/transactions/page";
+import { ModalType } from "@/app/(dashboard)/transactions/page";
 import TransactionsItem from "./TransactionsItem";
 import { Transaction } from "@/lib/api/transactions";
 

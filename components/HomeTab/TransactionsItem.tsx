@@ -3,7 +3,7 @@
 import css from "./TransactionsItem.module.css";
 import { GoPencil } from "react-icons/go";
 import { useEffect, useState } from "react";
-import { ModalType } from "@/app/transactions/page";
+import { ModalType } from "@/app/(dashboard)/transactions/page";
 import { Transaction } from "@/lib/api/transactions";
 
 interface Props {
