@@ -23,6 +23,8 @@ export default function Transaction() {
     queryFn: fetchAllTransactions,
   });
 
+  console.log(data);
+
   return (
     <>
       {data && <TransactionsList setModalType={setModalType} data={data} />}
