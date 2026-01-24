@@ -8,9 +8,8 @@ import { Loader } from "../Loader/Loader";
 import axios from "axios";
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const setUser = useAuthStore((s) => s.setUser);
   const logout = useAuthStore((s) => s.logout);
-  const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
+  const user = useAuthStore((s) => s.user);
 
   const pathname = usePathname();
   const [checking, setChecking] = useState(true);
@@ -28,20 +27,18 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
     const refreshSession = async () => {
       try {
-        const user = await authApi.refresh();
+        const success = await authApi.refresh();
 
-        if (!cancelled) {
-          setUser(user);
+        if (!success && user && !cancelled) {
+          logout();
         }
       } catch (error) {
         if (
           axios.isAxiosError(error) &&
           error.response?.status === 401 &&
-          isAuthenticated
+          !cancelled
         ) {
-          if (!cancelled) {
-            logout();
-          }
+          logout();
         }
       } finally {
         if (!cancelled) {
@@ -55,10 +52,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     return () => {
       cancelled = true;
     };
-  }, [pathname, setUser, logout, isAuthenticated]);
+  }, [pathname, logout, user]);
 
   if (checking) {
-    return <Loader />;
+    return (
+      <div className="auth-loader-overlay">
+        <Loader size={80} />
+      </div>
+    );
   }
 
   return <>{children}</>;

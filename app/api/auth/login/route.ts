@@ -1,41 +1,63 @@
 import { NextRequest, NextResponse } from "next/server";
+import { isAxiosError } from "axios";
+import { cookies } from "next/headers";
+import { parse } from "cookie";
 import { spendiApi } from "../../api";
-import { AxiosError } from "axios";
-
-export const runtime = "nodejs";
-export const dynamic = "force-dynamic";
-
-// const BACKEND_URL = process.env.API_BASE_URL;
 
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
 
-    const { data, headers } = await spendiApi.post("/auth/login", body);
+    const apiRes = await spendiApi.post("/auth/login", body);
 
-    const response = NextResponse.json(
-      {
-        id: data._id || data.id,
-        email: data.email,
-        name: data.name,
-        balance: data.balance ?? 0,
-      },
-      { status: 200 },
-    );
+    const cookieStore = await cookies();
+    const setCookie = apiRes.headers["set-cookie"];
 
-    const cookies = headers["set-cookie"];
-    if (cookies) {
-      cookies.forEach((cookie) => {
-        response.headers.append("set-cookie", cookie);
+    if (setCookie) {
+      const cookieArray = Array.isArray(setCookie) ? setCookie : [setCookie];
+
+      for (const cookieStr of cookieArray) {
+        const parsed = parse(cookieStr);
+
+        const options = {
+          expires: parsed.Expires ? new Date(parsed.Expires) : undefined,
+          path: parsed.Path ?? "/",
+          maxAge: parsed["Max-Age"] ? Number(parsed["Max-Age"]) : undefined,
+        };
+
+        if (parsed.accessToken) {
+          cookieStore.set("accessToken", parsed.accessToken, options);
+        }
+
+        if (parsed.refreshToken) {
+          cookieStore.set("refreshToken", parsed.refreshToken, options);
+        }
+
+        if (parsed.sessionId) {
+          cookieStore.set("sessionId", parsed.sessionId, options);
+        }
+      }
+
+      return NextResponse.json(apiRes.data, {
+        status: apiRes.status,
       });
     }
 
-    return response;
-  } catch (err) {
-    const error = err as AxiosError;
-    const status = error.response?.status ?? 500;
-    const data = error.response?.data ?? { message: "Internal proxy error" };
+    return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+  } catch (error) {
+    if (isAxiosError(error)) {
+      return NextResponse.json(
+        {
+          message:
+            error.response?.data?.message || error.message || "Login failed",
+        },
+        { status: error.response?.status || 500 },
+      );
+    }
 
-    return NextResponse.json(data, { status });
+    return NextResponse.json(
+      { message: "Internal Server Error" },
+      { status: 500 },
+    );
   }
 }
