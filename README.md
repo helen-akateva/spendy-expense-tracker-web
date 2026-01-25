@@ -1,36 +1,192 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 💰 Spendy - Personal Finance Tracker
 
-## Getting Started
+Spendy is a modern web application for tracking personal finances, managing expenses and income, and visualizing financial statistics. Built with Next.js 16 and TypeScript, it provides an intuitive interface for managing your budget across all devices.
 
-First, run the development server:
+## 📋 About the Project
 
+Spendy helps users:
+- **Track transactions** - Record income and expenses with categories
+- **Monitor balance** - Real-time balance updates with every transaction
+- **Analyze spending** - Visual statistics and charts by category and period
+- **Stay informed** - Live currency exchange rates (UAH, USD, EUR)
+- **Access anywhere** - Fully responsive design for mobile, tablet, and desktop
+
+## 🚀 Technologies Used
+
+### Core
+- **Next.js 16.1.3** - React framework with App Router
+- **React 19** - UI library
+- **TypeScript** - Type-safe development
+- **CSS Modules** - Component-scoped styling
+
+### State Management & Data Fetching
+- **Zustand** - Lightweight state management
+- **TanStack Query (React Query)** - Server state management
+- **Axios** - HTTP client
+
+### Forms & Validation
+- **Formik** - Form management
+- **Yup** - Schema validation
+- **React Datepicker** - Date selection
+
+### UI Components & Visualization
+- **Recharts** - Data visualization and charts
+- **React Hot Toast** - Toast notifications
+- **React Loader Spinner** - Loading indicators
+- **React Select** - Enhanced select inputs
+- **React Icons** - Icon library
+
+### Styling
+- **Modern Normalize** - CSS reset
+- **Google Fonts** - Inter & Poppins fonts
+- **CSS Variables** - Consistent theming
+
+## 📦 Installation and Setup
+
+### Prerequisites
+- Node.js 20+ 
+- npm or yarn
+
+### Installation Steps
+
+1. **Clone the repository**
+```bash
+git clone https://github.com/your-username/web-spendy-expence-tracker.git
+cd web-spendy-expence-tracker
+```
+
+2. **Install dependencies**
+```bash
+npm install
+# or
+yarn install
+```
+
+3. **Run development server**
 ```bash
 npm run dev
 # or
 yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+4. **Build for production**
+```bash
+npm run build
+npm start
+# or
+yarn build
+yarn start
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 🏗️ Project Structure
 
-## Learn More
+```
+web-spendy-expence-tracker/
+├── app/                      # Next.js App Router
+│   ├── (auth)/              # Authentication pages (public routes)
+│   │   ├── login/
+│   │   └── register/
+│   ├── (dashboard)/         # Dashboard pages (private routes)
+│   │   ├── transactions/    # Home tab - transaction list
+│   │   ├── statistics/      # Statistics with charts
+│   │   └── currency/        # Currency rates (mobile)
+│   ├── api/                 # API Route Handlers
+│   ├── globals.css          # Global styles and CSS variables
+│   └── layout.tsx           # Root layout
+├── components/              # React components
+│   ├── Auth/               # Login & Registration forms
+│   ├── HomeTab/            # Transaction list & items
+│   ├── StatisticsTab/      # Charts and statistics
+│   ├── UserAcountLayout/   # Header, Sidebar, Navigation
+│   ├── Modal*/             # Modal windows
+│   └── ...
+├── lib/                     # Utilities and services
+│   ├── api/                # API client functions
+│   ├── hooks/              # Custom React hooks
+│   ├── stores/             # Zustand stores
+│   ├── services/           # Business logic
+│   └── validations/        # Yup schemas
+├── public/                  # Static assets
+├── middleware.ts            # Route protection middleware
+└── package.json
+```
 
-To learn more about Next.js, take a look at the following resources:
+## 🔐 Authentication
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+The app uses JWT-based authentication with:
+- **Public routes**: `/login`, `/register`
+- **Private routes**: `/`, `/transactions`, `/statistics`, `/currency`
+- **Middleware protection**: Automatic redirects based on auth status
+- **Persistent sessions**: Zustand with localStorage
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 🎨 Features
 
-## Deploy on Vercel
+### 📊 Transaction Management
+- Add, edit, and delete transactions
+- Categorize as income or expenses
+- Add comments and select dates
+- Real-time balance updates
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### 📈 Statistics & Analytics
+- Interactive charts (Recharts)
+- Filter by month and year
+- Toggle between income/expenses
+- Category breakdown
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### 💱 Currency Rates
+- Live exchange rates from Monobank API
+- Cached for 1 hour (localStorage)
+- UAH, USD, EUR support
+
+### 📱 Responsive Design
+- Mobile-first approach
+- Breakpoints: 320px, 768px, 1280px
+- Optimized layouts for all devices
+
+## 🌐 Deployment
+
+The application can be deployed on:
+- **Vercel** (recommended for Next.js)
+- **Netlify**
+- **Custom server** with Node.js
+
+### Deploy to Vercel
+```bash
+vercel deploy
+```
+
+## 📝 API Integration
+
+The app connects to a backend API with the following endpoints:
+- `POST /api/auth/register` - User registration
+- `POST /api/auth/login` - User login
+- `POST /api/auth/logout` - User logout
+- `GET /api/users/current` - Get current user
+- `GET /api/transactions` - Get all transactions
+- `POST /api/transactions` - Create transaction
+- `PATCH /api/transactions/:id` - Update transaction
+- `DELETE /api/transactions/:id` - Delete transaction
+- `GET /api/summary/:period` - Get statistics
+- `GET /api/categories` - Get categories
+
+
+## 📄 License
+
+This project was created for educational purposes.
+
+## 👥 Team
+
+Developed by a team of developers as part of an educational project. Backend implementation follows production-oriented architectural principles.
+
+## 🙏 Acknowledgments
+
+- Design inspiration from modern fintech apps
+- [Next.js](https://nextjs.org/) team for the amazing framework
+- [Monobank API](https://api.monobank.ua/docs/) for currency rates
+- All open-source libraries used in this project
+
+---
+
+**Made with ❤️ for better financial management**
