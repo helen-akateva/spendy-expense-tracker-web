@@ -31,7 +31,13 @@ const validationSchema = Yup.object({
     .min(1, "Amount must be at least 1")
     .max(1000000, "Amount must be at most 1 000 000")
     .typeError("Amount must be a number"),
-  date: Yup.date().required("Date is required"),
+  date: Yup.date()
+    .required("Date is required")
+    .max(new Date(), "Cannot select future date")
+    .min(
+      new Date(new Date().setFullYear(new Date().getFullYear() - 1)),
+      "Date cannot be older than 1 year"
+    ),
   categoryId: Yup.string().when("type", {
     is: "expense",
     then: (schema) => schema.required("Category is required"),
@@ -101,13 +107,12 @@ export default function TransactionForm({
           <div className={css.fixedWidthGrop}>
             <div className={css.formGrop}>
               <Field
-                className={`${css.input} ${css.fixedWidth} ${
-                  touched.amount
-                    ? errors.amount
-                      ? css.inputError
-                      : css.inputSuccess
-                    : ""
-                }`}
+                className={`${css.input} ${css.fixedWidth} ${touched.amount
+                  ? errors.amount
+                    ? css.inputError
+                    : css.inputSuccess
+                  : ""
+                  }`}
                 name="amount"
                 type="number"
                 placeholder="0.00"
@@ -128,15 +133,16 @@ export default function TransactionForm({
                 customInput={<input className={css.input} />}
                 onClickOutside={() => setIsOpen(false)}
                 onSelect={() => setIsOpen(false)}
-                className={`${css.input} ${css.fixedWidth}  ${
-                  touched.date
-                    ? errors.date
-                      ? css.inputError
-                      : css.inputSuccess
-                    : ""
-                }`}
+                className={`${css.input} ${css.fixedWidth}  ${touched.date
+                  ? errors.date
+                    ? css.inputError
+                    : css.inputSuccess
+                  : ""
+                  }`}
                 selected={values.date}
                 onChange={(date: Date | null) => setFieldValue("date", date)}
+                maxDate={new Date()}
+                minDate={new Date(new Date().setFullYear(new Date().getFullYear() - 1))}
               />
               <ErrorMessage
                 name="date"

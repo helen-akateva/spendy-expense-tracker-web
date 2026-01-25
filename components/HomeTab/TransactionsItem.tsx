@@ -41,9 +41,8 @@ const TransactionItem = ({
           return (
             <div className={css.tableWrapper} key={_id}>
               <table
-                className={`${css.transactionTable} ${
-                  type === "income" ? css.greenBefore : ""
-                }`}
+                className={`${css.transactionTable} ${type === "income" ? css.greenBefore : ""
+                  }`}
               >
                 <thead className={css.thead}>
                   <tr className={css.tr}>
@@ -70,7 +69,7 @@ const TransactionItem = ({
                 <tbody className={`${css.tbody} ${css.mobileTd}`}>
                   <tr className={`${css.tr} ${css.valueTr}`}>
                     <td className={css.td}>{date}</td>
-                    <td className={css.td}>{type}</td>
+                    <td className={css.td}>{type === "income" ? "+" : "-"}</td>
                     <td className={css.td}>{category.name}</td>
                     <td className={css.td}>{comment}</td>
                     <td
@@ -142,7 +141,7 @@ const TransactionItem = ({
               return (
                 <tr key={_id} className={`${css.tr} ${css.valueTr}`}>
                   <td className={css.td}>{date}</td>
-                  <td className={css.td}>{type}</td>
+                  <td className={css.td}>{type === "income" ? "+" : "-"}</td>
                   <td className={css.td}>{category.name}</td>
                   <td className={css.td}>{comment}</td>
                   <td className={css.td}>{amount}</td>
