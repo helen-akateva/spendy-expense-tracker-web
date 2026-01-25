@@ -1,6 +1,7 @@
 /*? Mobile */
 
 .transactionPage {
+  position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -189,7 +190,7 @@
 /* add btn style */
 
 .button {
-  position: fixed;
+  position: absolute;
   right: 20px;
   bottom: 20px;
   background-color: #508f8c;
@@ -199,6 +200,7 @@
   justify-content: center;
   align-items: center;
   border-radius: 100%;
+  z-index: 50;
 }
 
 @media only screen and (min-width: 768px) {
@@ -211,6 +213,23 @@
   width: 25px;
   height: 25px;
   color: #000;
+}
+
+.tableWrapper,
+.transactionTable,
+.transactionPage {
+  position: relative;
+  min-height: 293px;
+}
+
+@media only screen and (min-width: 768px) {
+  .tableWrapper,
+  .transactionTable,
+  .transactionPage {
+    min-height: 538px;
+    max-width: 704px;
+    margin: 0;
+  }
 }
 
 @media only screen and (min-width: 1280px) {

@@ -17,8 +17,27 @@
 @media only screen and (min-width: 1280px) {
   .sidebarContainer {
     justify-content: flex-start;
+    flex-wrap: nowrap;
     width: 451px;
-    height: 757px;
+    height: 585px;
     margin: 0;
+  }
+}
+
+.accountContainer {
+  display: flex;
+  flex-direction: column;
+  border-radius: 16px;
+  padding: 16px;
+  width: 338px;
+  height: 143px;
+  background: linear-gradient(180deg, #355f64 0%, #294045 100%);
+}
+
+@media only screen and (min-width: 1280px) {
+  .accountContainer {
+    border-radius: 16px;
+    width: 448px;
+    height: 469px;
   }
 }

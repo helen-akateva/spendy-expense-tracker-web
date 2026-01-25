@@ -18,7 +18,7 @@ export default function Transaction() {
 
   const closeModal = () => setModalType(null);
 
-  const { data, isLoading, isError } = useQuery<Transaction[]>({
+  const { data } = useQuery<Transaction[]>({
     queryKey: ["transactions"],
     queryFn: fetchAllTransactions,
   });
@@ -27,13 +27,13 @@ export default function Transaction() {
     <>
       {data && <TransactionsList setModalType={setModalType} data={data} />}
 
-      <button
+      {/* <button
         className={css.buttonDelete}
         onClick={() => setModalType("delete")}
       >
         Delete
       </button>
-      <button>Edit modal</button>
+      <button>Edit modal</button> */}
       {modalType === "add" && <ModalAddTransaction onClose={closeModal} />}
       {/* {modalType === "edit" && <ModalEditTransaction onClose={closeModal} />} */}
       {modalType === "delete" && (
