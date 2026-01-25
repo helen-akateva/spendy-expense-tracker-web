@@ -60,5 +60,6 @@ export const updateTransaction = async (
 };
 
 export const deleteTransaction = async (id: string) => {
-  await nextApi.delete(`/api/transactions/${id}`);
+  const { data } = await nextApi.delete(`/api/transactions/${id}`);
+  return data;
 };

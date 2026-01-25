@@ -1,6 +1,10 @@
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useFinanceStore } from "@/lib/stores/financeStore";
 import CancelButton from "../CancelButton/CancelButton";
 import Modal from "../Modal/Modal";
 import css from "./ModalDeleteTransaction.module.css";
+import { deleteTransaction } from "@/lib/api/transactions";
+import toast from "react-hot-toast";
 
 interface Props {
   transaction: {
@@ -18,9 +22,27 @@ export default function ModalDeleteTransaction({
   transaction,
   onClose,
 }: Props) {
+  const queryClient = useQueryClient();
+
+  const updateBalance = useFinanceStore((s) => s.updateBalance);
+
+  const { mutate } = useMutation({
+    mutationFn: deleteTransaction,
+    onSuccess: () => {
+      const isIncome = transaction.type === "income";
+      updateBalance(transaction.amount, !isIncome);
+      queryClient.invalidateQueries({ queryKey: ["transactions"] });
+
+      toast.success("Transaction deleted successfully");
+      onClose();
+    },
+    onError: () => {
+      toast.error("Failed to delete transaction");
+    },
+  });
+
   const handleDelete = () => {
-    console.log("DELETE:", transaction._id);
-    onClose();
+    mutate(transaction._id);
   };
 
   return (
