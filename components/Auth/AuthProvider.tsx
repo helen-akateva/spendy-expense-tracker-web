@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 
 import { authApi } from "@/lib/services/authService";
-import { useAuthStore } from "@/lib/store/authStore";
+import { useAuthStore } from "@/lib/stores/authStore";
 import { Loader } from "../Loader/Loader";
 import axios from "axios";
 

@@ -7,14 +7,14 @@ import { useRef, useState, useEffect } from "react";
 
 import css from "./TransactionForm.module.css";
 import CategorySelect, { Option } from "../CategorySelect/CategorySelect";
-import { Category, fetchCategories } from "@/lib/api/category";
+import { fetchCategories } from "@/lib/api/category";
 import Toggle from "../Toggle/Toggle";
 
 export interface TransactionFormValues {
   type: "income" | "expense";
-  amount: number | "";
+  amount: number;
   date: Date;
-  category: string;
+  categoryId: string;
   comment: string;
 }
 
@@ -28,13 +28,18 @@ const validationSchema = Yup.object({
   type: Yup.string().oneOf(["income", "expense"]).required(),
   amount: Yup.number()
     .required("Amount is required")
-    .positive("Amount must be greater than 0"),
-  date: Yup.date().required(),
-  category: Yup.string().when("type", {
+    .min(1, "Amount must be at least 1")
+    .max(1000000, "Amount must be at most 1 000 000")
+    .typeError("Amount must be a number"),
+  date: Yup.date().required("Date is required"),
+  categoryId: Yup.string().when("type", {
     is: "expense",
     then: (schema) => schema.required("Category is required"),
   }),
-  comment: Yup.string().max(100),
+  comment: Yup.string()
+    .min(2, "Comment must be at least 2 characters")
+    .max(192, "Comment must be at most 192 characters")
+    .optional(),
 });
 
 export default function TransactionForm({
@@ -45,15 +50,16 @@ export default function TransactionForm({
   const datePickerRef = useRef<DatePicker>(null);
   const [isOpen, setIsOpen] = useState(false);
 
+  const [type, setType] = useState<"income" | "expense">(initialValues.type);
   const [categoryOptions, setCategoryOptions] = useState<Option[]>([]);
 
   useEffect(() => {
-    fetchCategories({ type: "expense" }).then((categories) =>
+    fetchCategories({ type }).then((categories) =>
       setCategoryOptions(
         categories.map((cat) => ({ value: cat._id, label: cat.name })),
       ),
     );
-  }, []);
+  }, [type]);
 
   return (
     <Formik<TransactionFormValues>
@@ -71,25 +77,27 @@ export default function TransactionForm({
         <Form className={css.form}>
           <Toggle
             value={values.type}
-            onChange={(value) => setFieldValue("type", value)}
+            onChange={(value) => {
+              setType(value);
+              setFieldValue("type", value);
+            }}
           />
 
-          {values.type === "expense" && (
-            <div style={{ width: "100%", paddingBottom: "12px" }}>
-              <Field
-                name="category"
-                component={CategorySelect}
-                options={categoryOptions}
-                hasError={touched.category && !!errors.category}
-                hasSuccess={touched.category && !errors.category}
-              />
-              <ErrorMessage
-                name="category"
-                component="p"
-                className={css.errorText}
-              />
-            </div>
-          )}
+          <div style={{ width: "100%", paddingBottom: "12px" }}>
+            <Field
+              name="categoryId"
+              component={CategorySelect}
+              options={categoryOptions}
+              hasError={touched.categoryId && !!errors.categoryId}
+              hasSuccess={touched.categoryId && !errors.categoryId}
+            />
+            <ErrorMessage
+              name="categoryId"
+              component="p"
+              className={css.errorText}
+            />
+          </div>
+
           <div className={css.fixedWidthGrop}>
             <div className={css.formGrop}>
               <Field

@@ -4,11 +4,11 @@ import { ErrorMessage, Field, Form, Formik } from "formik";
 import css from "./LoginForm.module.css";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
-import { useAuthStore } from "@/lib/store/authStore";
+import { useAuthStore } from "@/lib/stores/authStore";
 import { loginValidationSchema } from "@/lib/validations/loginSchema";
 import { authApi } from "@/lib/services/authService";
 import { Loader } from "@/components/Loader/Loader";
-import { useAuthFormStore } from "@/lib/store/authFormStore";
+import { useAuthFormStore } from "@/lib/stores/authFormStore";
 
 interface LoginFormValues {
   email: string;
@@ -36,7 +36,7 @@ export default function LoginForm() {
       setUser(user);
       clear();
       toast.success("Welcome back 👋");
-      router.replace("/dashboard");
+      router.replace("/");
     } catch (error) {
       toast.error(error instanceof Error ? error?.message : "Login failed");
     } finally {

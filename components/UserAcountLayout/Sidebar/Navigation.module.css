@@ -7,17 +7,11 @@
   margin: 0 auto;
 }
 
-@media only screen and (min-width: 744px) {
+@media only screen and (min-width: 768px) {
   .navPanel {
     flex-direction: column;
-    gap: 24px;
-    margin: 0;
-  }
-}
-
-@media only screen and (min-width: 744px) {
-  .navPanel {
     gap: 12px;
+    margin: 0;
   }
 }
 
@@ -29,7 +23,7 @@
   opacity: 0.5;
 }
 
-@media only screen and (min-width: 744px) {
+@media only screen and (min-width: 768px) {
   .navIcon {
     width: 18px;
     height: 18px;
@@ -64,7 +58,7 @@
   font-weight: 700;
 }
 
-@media only screen and (min-width: 744px) {
+@media only screen and (min-width: 768px) {
   .activePath {
     width: 24px;
     height: 24px;
@@ -72,14 +66,14 @@
   }
 }
 
-@media only screen and (min-width: 744px) {
+@media only screen and (min-width: 768px) {
   .activePath {
     width: 18px;
     height: 18px;
   }
 }
 
-@media only screen and (min-width: 744px) {
+@media only screen and (min-width: 768px) {
   .navContainer {
     display: flex;
     justify-content: start;
@@ -101,7 +95,7 @@
   }
 }
 
-@media only screen and (min-width: 744px) {
+@media only screen and (min-width: 768px) {
   .navPanelItem {
     display: flex;
     justify-content: start;

@@ -1,4 +1,3 @@
-import { AuthProvider } from "@/components/Auth/AuthProvider";
 import type { Metadata } from "next";
 import "./globals.css";
 import { Inter, Poppins } from "next/font/google";
@@ -35,10 +34,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${inter.variable} ${poppins.variable}`}>
-        <AuthProvider>
-          <TanStackProvider>{children}</TanStackProvider>
+        <TanStackProvider>
+          {children}
           <ToastProvider />
-        </AuthProvider>
+        </TanStackProvider>
       </body>
     </html>
   );

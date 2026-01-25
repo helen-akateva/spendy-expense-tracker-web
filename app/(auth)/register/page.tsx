@@ -2,7 +2,7 @@
 
 import { RegisterBackground } from "@/components/Auth/RegisterBackground";
 import RegistrationForm from "@/components/Auth/RegistrationForm";
-import { useAuthStore } from "@/lib/store/authStore";
+import { useAuthStore } from "@/lib/stores/authStore";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 

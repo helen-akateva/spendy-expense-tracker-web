@@ -2,7 +2,7 @@
 
 import { LoginBackground } from "@/components/Auth/LoginBackground";
 import LoginForm from "@/components/Auth/LoginForm";
-import { useAuthStore } from "@/lib/store/authStore";
+import { useAuthStore } from "@/lib/stores/authStore";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
