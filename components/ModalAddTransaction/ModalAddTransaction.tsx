@@ -7,6 +7,7 @@ import CancelButton from "../CancelButton/CancelButton";
 import { addNewTransaction } from "@/lib/api/transactions";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
+import { useFinanceStore } from "@/lib/stores/financeStore";
 
 interface Props {
   onClose: () => void;
@@ -14,10 +15,14 @@ interface Props {
 
 export default function ModalAddTransaction({ onClose }: Props) {
   const queryClient = useQueryClient();
+  const updateBalance = useFinanceStore((s) => s.updateBalance);
 
   const mutation = useMutation({
     mutationFn: addNewTransaction,
-    onSuccess: () => {
+    onSuccess: (newTransaction) => {
+      const isIncome = newTransaction.type === "income";
+      updateBalance(newTransaction.amount, isIncome);
+
       queryClient.invalidateQueries({ queryKey: ["transactions"] });
       toast.success("Transaction added successfully");
       onClose();

@@ -5,6 +5,10 @@ import TransactionForm, {
 
 import css from "./ModalEditTransaction.module.css";
 import CancelButton from "../CancelButton/CancelButton";
+import { useFinanceStore } from "@/lib/stores/financeStore";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { updateTransaction } from "@/lib/api/transactions";
+import toast from "react-hot-toast";
 
 interface Props {
   transaction: {
@@ -19,6 +23,9 @@ interface Props {
 }
 
 export default function ModalEditTransaction({ transaction, onClose }: Props) {
+  const queryClient = useQueryClient();
+  const updateBalance = useFinanceStore((s) => s.updateBalance);
+
   const initialValues: TransactionFormValues = {
     type: transaction.type,
     amount: transaction.amount,
@@ -27,13 +34,31 @@ export default function ModalEditTransaction({ transaction, onClose }: Props) {
     comment: transaction.comment ?? "",
   };
 
-  const handleSubmit = async (values: TransactionFormValues) => {
-    console.log("EDIT:", {
-      id: transaction._id,
-      ...values,
-    });
+  const mutation = useMutation({
+    mutationFn: ({ id, data }: { id: string; data: TransactionFormValues }) =>
+      updateTransaction(id, {
+        ...data,
+        date: data.date.toISOString().split("T")[0],
+      }),
+    onSuccess: (updatedTransaction, variables) => {
+      const oldIsIncome = transaction.type === "income";
+      updateBalance(transaction.amount, !oldIsIncome);
 
-    onClose();
+      const newIsIncome = variables.data.type === "income";
+      updateBalance(variables.data.amount, newIsIncome);
+
+      queryClient.invalidateQueries({ queryKey: ["transactions"] });
+
+      toast.success("Transaction updated successfully");
+      onClose();
+    },
+    onError: () => {
+      toast.error("Failed to update transaction");
+    },
+  });
+
+  const handleSubmit = async (values: TransactionFormValues) => {
+    await mutation.mutateAsync({ id: transaction._id, data: values });
   };
 
   return (
