@@ -2,7 +2,7 @@
 
 import styles from "./Currency.module.css";
 import { useEffect, useState } from "react";
-import { useFinanceStore } from "@/lib/stores/financeStore";
+import { useFinanceStore } from "@/lib/stores/financeStore.js";
 
 const MONOBANK_API = "https://api.monobank.ua/bank/currency";
 const CACHE_TIME = 60 * 60 * 1000; // 1 hour in milliseconds
