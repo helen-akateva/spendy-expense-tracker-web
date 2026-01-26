@@ -44,21 +44,6 @@ export default function ModalDeleteTransaction({
   });
 
   const handleDelete = () => {
-    // Calculate what the balance would be after deletion
-    const isIncome = transaction.type === "income";
-    const newBalance = isIncome
-      ? currentBalance - transaction.amount  // Removing income decreases balance
-      : currentBalance + transaction.amount; // Removing expense increases balance
-
-    // Prevent deletion if balance would become negative
-    if (newBalance < 0) {
-      toast.error(
-        "Cannot delete this transaction. Balance would become negative. Please delete expenses first.",
-        { duration: 4000 }
-      );
-      return;
-    }
-
     mutate(transaction._id);
   };
 
