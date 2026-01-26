@@ -1,5 +1,5 @@
-import { Oval } from 'react-loader-spinner';
-import styles from './Loader.module.css';
+import { Oval } from "react-loader-spinner";
+import styles from "./Loader.module.css";
 
 interface LoaderProps {
   size?: number;
