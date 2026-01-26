@@ -7,8 +7,12 @@ import { useRef, useState, useEffect, useMemo } from "react";
 
 import css from "./TransactionForm.module.css";
 import CategorySelect, { Option } from "../CategorySelect/CategorySelect";
-import { fetchCategories } from "@/lib/api/category";
+
 import Toggle from "../Toggle/Toggle";
+import {
+  useCategoriesStore,
+  CategoriesState,
+} from "@/lib/stores/categoriesStore";
 
 export interface TransactionFormValues {
   type: "income" | "expense";
@@ -22,28 +26,47 @@ interface Props {
   initialValues: TransactionFormValues;
   submitText: string;
   onSubmit: (values: TransactionFormValues) => Promise<void>;
+  disabled?: boolean;
 }
-
-
 
 export default function TransactionForm({
   initialValues,
   submitText,
   onSubmit,
+  disabled,
 }: Props) {
   const datePickerRef = useRef<DatePicker>(null);
   const [isOpen, setIsOpen] = useState(false);
 
   const [type, setType] = useState<"income" | "expense">(initialValues.type);
-  const [categoryOptions, setCategoryOptions] = useState<Option[]>([]);
+  // Використовуємо по одному селектору, щоб уникнути проблем з типами
+  const incomeCategories = useCategoriesStore(
+    (state: CategoriesState) => state.incomeCategories,
+  );
+  const expenseCategories = useCategoriesStore(
+    (state: CategoriesState) => state.expenseCategories,
+  );
+  const loadCategories = useCategoriesStore(
+    (state: CategoriesState) => state.loadCategories,
+  );
+  const isLoaded = useCategoriesStore(
+    (state: CategoriesState) => state.isLoaded,
+  );
+  const isLoading = useCategoriesStore(
+    (state: CategoriesState) => state.isLoading,
+  );
 
+  // Завантажуємо категорії один раз
   useEffect(() => {
-    fetchCategories({ type }).then((categories) =>
-      setCategoryOptions(
-        categories.map((cat) => ({ value: cat._id, label: cat.name })),
-      ),
-    );
-  }, [type]);
+    if (!isLoaded && !isLoading) loadCategories();
+  }, [isLoaded, isLoading, loadCategories]);
+
+  // Генеруємо опції для селекту
+  const categoryOptions: Option[] = useMemo(() => {
+    const categories = type === "income" ? incomeCategories : expenseCategories;
+    if (isLoading) return [{ value: "", label: "Loading..." }];
+    return categories.map((cat) => ({ value: cat._id, label: cat.name }));
+  }, [type, incomeCategories, expenseCategories, isLoading]);
 
   const validationSchema = useMemo(() => {
     return Yup.object({
@@ -58,13 +81,11 @@ export default function TransactionForm({
         .max(new Date(), "Cannot select future date")
         .min(
           new Date(new Date().setFullYear(new Date().getFullYear() - 1)),
-          "Date cannot be older than 1 year"
+          "Date cannot be older than 1 year",
         ),
-      categoryId: Yup.string().when("type", {
-        is: "expense",
-        then: (schema) => schema.required("Category is required"),
-      }),
+      categoryId: Yup.string().required("Category is required"),
       comment: Yup.string()
+        .required("Comment is required")
         .min(2, "Comment must be at least 2 characters")
         .max(192, "Comment must be at most 192 characters")
         .optional(),
@@ -83,7 +104,7 @@ export default function TransactionForm({
         }
       }}
     >
-      {({ values, setFieldValue, isSubmitting, errors, touched }) => (
+      {({ values, setFieldValue, errors, touched }) => (
         <Form className={css.form}>
           <Toggle
             value={values.type}
@@ -93,7 +114,7 @@ export default function TransactionForm({
             }}
           />
 
-          <div style={{ width: "100%", paddingBottom: "12px" }}>
+          <div className={css.formGrop}>
             <Field
               name="categoryId"
               component={CategorySelect}
@@ -111,15 +132,31 @@ export default function TransactionForm({
           <div className={css.fixedWidthGrop}>
             <div className={css.formGrop}>
               <Field
-                className={`${css.input} ${css.fixedWidth} ${touched.amount
-                  ? errors.amount
-                    ? css.inputError
-                    : css.inputSuccess
-                  : ""
-                  }`}
+                className={`${css.input} ${css.fixedWidth} ${
+                  touched.amount
+                    ? errors.amount
+                      ? css.inputError
+                      : css.inputSuccess
+                    : ""
+                }`}
                 name="amount"
                 type="number"
                 placeholder="0.00"
+                min={0}
+                max={1000000}
+                onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
+                  if (["e", "E", "+", "-"].includes(e.key)) {
+                    e.preventDefault();
+                  }
+                }}
+                onInput={(e: React.FormEvent<HTMLInputElement>) => {
+                  const input = e.currentTarget;
+                  let value = parseFloat(input.value);
+
+                  if (isNaN(value)) value = 0;
+                  if (value < 0) input.value = "0";
+                  if (value > 1000000) input.value = "1000000";
+                }}
               />
               <ErrorMessage
                 name="amount"
@@ -137,16 +174,19 @@ export default function TransactionForm({
                 customInput={<input className={css.input} />}
                 onClickOutside={() => setIsOpen(false)}
                 onSelect={() => setIsOpen(false)}
-                className={`${css.input} ${css.fixedWidth}  ${touched.date
-                  ? errors.date
-                    ? css.inputError
-                    : css.inputSuccess
-                  : ""
-                  }`}
+                className={`${css.input} ${css.fixedWidth}  ${
+                  touched.date
+                    ? errors.date
+                      ? css.inputError
+                      : css.inputSuccess
+                    : ""
+                }`}
                 selected={values.date}
                 onChange={(date: Date | null) => setFieldValue("date", date)}
                 maxDate={new Date()}
-                minDate={new Date(new Date().setFullYear(new Date().getFullYear() - 1))}
+                minDate={
+                  new Date(new Date().setFullYear(new Date().getFullYear() - 1))
+                }
               />
               <ErrorMessage
                 name="date"
@@ -164,6 +204,7 @@ export default function TransactionForm({
               </button>
             </div>
           </div>
+
           <div className={css.formGrop}>
             <Field className={css.input} name="comment" placeholder="Comment" />
             <ErrorMessage
@@ -176,7 +217,7 @@ export default function TransactionForm({
           <button
             className={css.buttonSubmit}
             type="submit"
-            disabled={isSubmitting}
+            disabled={disabled}
           >
             {submitText}
           </button>

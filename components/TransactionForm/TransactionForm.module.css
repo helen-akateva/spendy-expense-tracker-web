@@ -30,6 +30,12 @@
   position: relative;
 }
 
+@media only screen and (min-width: 768px) {
+  .formGrop {
+    padding-bottom: 30px;
+  }
+}
+
 .input {
   width: 100%;
   padding: 11px 14px;
@@ -72,8 +78,15 @@
 }
 
 .errorText {
+  font-size: 14px;
   padding-top: 4px;
   color: var(--main-red);
+}
+
+@media only screen and (min-width: 768px) {
+  .errorText {
+    position: absolute;
+  }
 }
 
 .buttonSubmit {
@@ -107,4 +120,9 @@
   border: none;
   cursor: pointer;
   padding: 0;
+}
+
+.buttonSubmit:disabled {
+  background: rgb(65, 84, 88);
+  cursor: not-allowed;
 }

@@ -48,3 +48,8 @@
     max-width: 410px;
   }
 }
+
+.delete:disabled {
+  background-color: #723a3a;
+  cursor: not-allowed;
+}
