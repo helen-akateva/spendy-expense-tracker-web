@@ -2,7 +2,7 @@
   border-radius: 16px;
   padding: 16px;
   width: 100%;
-  min-width: 280px;
+  width: 280px;
   min-height: 528px;
   background: #508f8c;
   margin: 0 auto;
@@ -10,7 +10,7 @@
 
 @media screen and (min-width: 768px) {
   .sectionform {
-    min-width: 534px;
+    width: 534px;
     min-height: 519px;
     padding-top: 53px;
     margin-top: 176px;
@@ -19,7 +19,7 @@
 
 @media screen and (min-width: 1280px) {
   .sectionform {
-    min-width: 533px;
+    width: 533px;
     margin-top: 75px;
   }
 }
@@ -57,7 +57,8 @@
   position: relative;
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 2px;
+  min-height: 62px;
 }
 
 @media screen and (min-width: 768px) {
@@ -115,7 +116,7 @@
   padding: 10px 14px 10px 50px;
   width: 100%;
   max-width: 409px;
-  min-width: 256px;
+  width: 248px;
   height: 44px;
   box-sizing: border-box;
   background: #508f8c;
@@ -200,7 +201,7 @@
   border-radius: 8px;
   padding: 11px 79px;
   width: 100%;
-  min-width: 256px;
+  width: 248px;
   height: 44px;
   background: linear-gradient(180deg, #355359 0%, #3b5d63 100%);
   border: none;
@@ -233,7 +234,7 @@
   border-radius: 8px;
   padding: 11px 68px;
   width: 100%;
-  min-width: 256px;
+  width: 248px;
   height: 44px;
   background: #508f8c;
   font-weight: 500;
