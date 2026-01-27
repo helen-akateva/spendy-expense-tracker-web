@@ -26,7 +26,7 @@ const TransactionItem = ({
         {isMobile && (
           <div className={css.emptyStateMobileWrapper}>
             <p className={css.emptyStateText}>No transactions found</p>
-            <p className={css.emptyStateSubText}>To start working, add an income transaction first!</p>
+            <p className={css.emptyStateSubText}>Add your first transaction!</p>
           </div>
         )}
 
@@ -49,7 +49,7 @@ const TransactionItem = ({
                 <td colSpan={7} className={css.tdEmpty}>
                   <div className={css.emptyStateWrapperDesktop}>
                     <p className={css.emptyStateText}>No transactions found</p>
-                    <p className={css.emptyStateSubText}>To start working, add an income transaction first!</p>
+                    <p className={css.emptyStateSubText}>Add your first transaction!</p>
                   </div>
                 </td>
               </tr>

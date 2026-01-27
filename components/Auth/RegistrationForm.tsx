@@ -31,6 +31,7 @@ const calculatePasswordStrength = (password: string) => {
 
 export default function RegistrationForm() {
   const router = useRouter();
+
   const setUser = useAuthStore((state) => state.setUser);
 
   const { name, email, setEmail, setName, clear } = useAuthFormStore();
@@ -81,7 +82,7 @@ export default function RegistrationForm() {
 
           return (
             <Form noValidate className={css.form}>
-              {isSubmitting && (
+              {(isSubmitting || isNavigating) && (
                 <div className={css.loaderOverlay}>
                   <Loader size={80} />
                 </div>

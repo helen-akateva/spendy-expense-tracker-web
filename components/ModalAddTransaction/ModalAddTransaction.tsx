@@ -4,7 +4,11 @@ import TransactionForm, {
 } from "@/components/TransactionForm/TransactionForm";
 import css from "./ModalAddTransaction.module.css";
 import CancelButton from "../CancelButton/CancelButton";
-import { addNewTransaction } from "@/lib/api/transactions";
+import {
+  addNewTransaction,
+  NewTransactionData,
+  Transaction,
+} from "@/lib/api/transactions";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import { useFinanceStore } from "@/lib/stores/financeStore";
@@ -17,13 +21,21 @@ export default function ModalAddTransaction({ onClose }: Props) {
   const queryClient = useQueryClient();
   const updateBalance = useFinanceStore((s) => s.updateBalance);
 
-  const mutation = useMutation({
+  const mutation = useMutation<
+    Transaction,
+    { response?: { message?: string } },
+    NewTransactionData
+  >({
     mutationFn: addNewTransaction,
     onSuccess: (newTransaction) => {
       const isIncome = newTransaction.type === "income";
-      updateBalance(newTransaction.amount, isIncome);
+      updateBalance(Number(newTransaction.amount), isIncome);
 
-      queryClient.invalidateQueries({ queryKey: ["transactions"] });
+      queryClient.setQueryData<Transaction[]>(["transactions"], (old = []) => [
+        newTransaction,
+        ...old,
+      ]);
+
       toast.success("Transaction added successfully");
       onClose();
     },
@@ -54,8 +66,9 @@ export default function ModalAddTransaction({ onClose }: Props) {
       <h2 className={css.h2}>Add transaction</h2>
       <TransactionForm
         initialValues={initialValues}
-        submitText="Add"
+        submitText={mutation.status === "pending" ? "Adding..." : "Add"}
         onSubmit={handleSubmit}
+        disabled={mutation.status === "pending"}
       />
 
       <CancelButton onClick={onClose} />

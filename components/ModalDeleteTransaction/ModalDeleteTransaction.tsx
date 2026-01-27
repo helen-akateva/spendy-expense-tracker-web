@@ -3,7 +3,7 @@ import { useFinanceStore } from "@/lib/stores/financeStore";
 import CancelButton from "../CancelButton/CancelButton";
 import Modal from "../Modal/Modal";
 import css from "./ModalDeleteTransaction.module.css";
-import { deleteTransaction } from "@/lib/api/transactions";
+import { deleteTransaction, Transaction } from "@/lib/api/transactions";
 import toast from "react-hot-toast";
 
 interface Props {
@@ -25,41 +25,27 @@ export default function ModalDeleteTransaction({
   const queryClient = useQueryClient();
 
   const updateBalance = useFinanceStore((s) => s.updateBalance);
-  const currentBalance = useFinanceStore((s) => s.balance);
 
-  const { mutate } = useMutation({
+  const mutation = useMutation({
     mutationFn: deleteTransaction,
     onSuccess: () => {
       const isIncome = transaction.type === "income";
       updateBalance(transaction.amount, !isIncome);
-      queryClient.invalidateQueries({ queryKey: ["transactions"] });
 
+      // ✅ Видаляємо транзакцію з кешу без повторного fetch
+      queryClient.setQueryData<Transaction[]>(["transactions"], (old = []) =>
+        old.filter((t) => t._id !== transaction._id),
+      );
       toast.success("Transaction deleted successfully");
       onClose();
     },
-    onError: (error: any) => {
-      const errorMessage = error?.response?.data?.message || "Failed to delete transaction";
-      toast.error(errorMessage);
+    onError: () => {
+      toast.error("Failed to delete transaction");
     },
   });
 
   const handleDelete = () => {
-    // Calculate what the balance would be after deletion
-    const isIncome = transaction.type === "income";
-    const newBalance = isIncome
-      ? currentBalance - transaction.amount  // Removing income decreases balance
-      : currentBalance + transaction.amount; // Removing expense increases balance
-
-    // Prevent deletion if balance would become negative
-    if (newBalance < 0) {
-      toast.error(
-        "Cannot delete this transaction. Balance would become negative. Please delete expenses first.",
-        { duration: 4000 }
-      );
-      return;
-    }
-
-    mutate(transaction._id);
+    mutation.mutate(transaction._id);
   };
 
   return (
@@ -75,8 +61,13 @@ export default function ModalDeleteTransaction({
           Are you sure you want to delete this transaction?
         </p>
 
-        <button type="button" className={css.delete} onClick={handleDelete}>
-          Delete
+        <button
+          type="button"
+          className={css.delete}
+          onClick={handleDelete}
+          disabled={mutation.status === "pending"}
+        >
+          {mutation.status === "pending" ? "Deleting..." : "Delete"}
         </button>
 
         <CancelButton onClick={onClose} />

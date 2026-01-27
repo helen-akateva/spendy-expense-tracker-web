@@ -7,7 +7,7 @@ import css from "./ModalEditTransaction.module.css";
 import CancelButton from "../CancelButton/CancelButton";
 import { useFinanceStore } from "@/lib/stores/financeStore";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { updateTransaction } from "@/lib/api/transactions";
+import { Transaction, updateTransaction } from "@/lib/api/transactions";
 import toast from "react-hot-toast";
 
 interface Props {
@@ -47,7 +47,11 @@ export default function ModalEditTransaction({ transaction, onClose }: Props) {
       const newIsIncome = variables.data.type === "income";
       updateBalance(variables.data.amount, newIsIncome);
 
-      queryClient.invalidateQueries({ queryKey: ["transactions"] });
+      queryClient.setQueryData<Transaction[]>(["transactions"], (old = []) =>
+        old.map((t) =>
+          t._id === updatedTransaction._id ? updatedTransaction : t,
+        ),
+      );
 
       toast.success("Transaction updated successfully");
       onClose();
@@ -67,8 +71,9 @@ export default function ModalEditTransaction({ transaction, onClose }: Props) {
 
       <TransactionForm
         initialValues={initialValues}
-        submitText="Save"
+        submitText={mutation.status === "pending" ? "Saving..." : "Save"}
         onSubmit={handleSubmit}
+        disabled={mutation.status === "pending"}
       />
 
       <CancelButton onClick={onClose} />
