@@ -5,21 +5,31 @@ import { GoPencil } from "react-icons/go";
 import { ModalType } from "@/app/(dashboard)/transactions/page";
 import { Transaction } from "@/lib/api/transactions";
 import { useMediaQuery } from "@/lib/hooks/useMediaQuery";
+import { Loader } from "@/components/Loader/Loader";
 
 interface Props {
   setModalType: (value: ModalType) => void;
   setSelectedTransaction: (value: Transaction | null) => void;
   data: Transaction[];
+  isLoading: boolean;
 }
 
 const TransactionItem = ({
   setModalType,
   setSelectedTransaction,
   data,
+  isLoading,
 }: Props) => {
   const isMobile = useMediaQuery("(max-width: 767.9px)");
 
   if (data.length === 0) {
+    if (isLoading) {
+      return (
+        <div className={css.loaderContainer}>
+          <Loader />
+        </div>
+      );
+    }
     return (
       <div className={css.transactionPage}>
         {/* MOBILE EMPTY STATE */}
