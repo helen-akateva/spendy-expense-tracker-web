@@ -56,23 +56,11 @@ const Currency = () => {
   );
 
   if (loading) {
-    return (
-      <div className={styles.currencyContainer}>
-        <div className={styles.errorWrapper}>
-          <p className={styles.errorText}>Loading...</p>
-        </div>
-      </div>
-    );
+    return <div className={styles.container}>Loading...</div>;
   }
 
   if (error) {
-    return (
-      <div className={styles.currencyContainer}>
-        <div className={styles.errorWrapper}>
-          <p className={styles.errorText}>{error}</p>
-        </div>
-      </div>
-    );
+    return <div className={styles.container}>{error}</div>;
   }
 
   return (

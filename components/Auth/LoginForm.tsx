@@ -1,7 +1,5 @@
 "use client";
 
-import { useState } from "react";
-
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import css from "./LoginForm.module.css";
 import { useRouter } from "next/navigation";
@@ -21,7 +19,6 @@ interface LoginFormValues {
 export default function LoginForm() {
   const router = useRouter();
   const setUser = useAuthStore((state) => state.setUser);
-  const [isNavigating, setIsNavigating] = useState(false);
 
   const { email, setEmail, clear } = useAuthFormStore();
 
@@ -30,34 +27,34 @@ export default function LoginForm() {
     password: "",
   };
 
-  const handleSubmit = async (
-    values: LoginFormValues,
-    { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void },
-  ) => {
-    try {
-      const user = await authApi.login(values);
+const handleSubmit = async (
+  values: LoginFormValues,
+  { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void },
+) => {
+  try {
+    const user = await authApi.login(values);
 
-      setUser(user);
-      clear();
-      toast.success("Welcome back 👋");
-      router.replace("/transactions");
-    } catch (error) {
-      // Перевірка чи це AxiosError
-      if (error instanceof AxiosError) {
-        if (error.response?.status === 401) {
-          toast.error("Invalid email or password");
-        } else {
-          toast.error(error.message || "Login failed");
-        }
-      } else if (error instanceof Error) {
-        toast.error(error.message);
+    setUser(user);
+    clear();
+    toast.success("Welcome back 👋");
+    router.replace("/");
+  } catch (error) {
+    // Перевірка чи це AxiosError
+    if (error instanceof AxiosError) {
+      if (error.response?.status === 401) {
+        toast.error("Invalid email or password");
       } else {
-        toast.error("Login failed");
+        toast.error(error.message || "Login failed");
       }
-    } finally {
-      setSubmitting(false);
+    } else if (error instanceof Error) {
+      toast.error(error.message);
+    } else {
+      toast.error("Login failed");
     }
-  };
+  } finally {
+    setSubmitting(false);
+  }
+};
 
   return (
     <section className={css.sectionform}>
@@ -69,7 +66,7 @@ export default function LoginForm() {
       >
         {({ isSubmitting, setFieldValue }) => (
           <Form noValidate className={css.form}>
-            {(isSubmitting || isNavigating) && (
+            {isSubmitting && (
               <div className={css.loaderOverlay}>
                 <Loader size={80} />
               </div>
@@ -91,7 +88,7 @@ export default function LoginForm() {
                   id="email"
                   className={css.inputfield}
                   placeholder="E-mail"
-                  disabled={isSubmitting || isNavigating}
+                  disabled={isSubmitting}
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                     setFieldValue("email", e.target.value);
                     setEmail(e.target.value);
@@ -114,7 +111,7 @@ export default function LoginForm() {
                   id="password"
                   className={css.inputfield}
                   placeholder="Password"
-                  disabled={isSubmitting || isNavigating}
+                  disabled={isSubmitting}
                 />
                 <ErrorMessage
                   name="password"
@@ -126,7 +123,7 @@ export default function LoginForm() {
               <button
                 className={css.btnsubmit}
                 type="submit"
-                disabled={isSubmitting || isNavigating}
+                disabled={isSubmitting}
               >
                 {isSubmitting ? "Log in..." : "Log in"}
               </button>
@@ -134,11 +131,8 @@ export default function LoginForm() {
               <button
                 className={css.btnregister}
                 type="button"
-                onClick={() => {
-                  setIsNavigating(true);
-                  router.push("/register");
-                }}
-                disabled={isSubmitting || isNavigating}
+                onClick={() => router.push("/register")}
+                disabled={isSubmitting}
               >
                 Register
               </button>

@@ -57,8 +57,7 @@ export default function RegistrationForm() {
       clear();
 
       toast.success("Account created successfully 🎉");
-      setIsNavigating(true);
-      router.replace("/transactions");
+      router.replace("/");
     } catch (error) {
       const message =
         error instanceof AxiosError && error.response?.data?.message
