@@ -31,7 +31,8 @@
   padding: 16px;
   width: 338px;
   height: 143px;
-  background: linear-gradient(180deg, #355f64 0%, #294045 100%);
+  background: linear-gradient(180deg, #355359 0%, #3b5d63 100%);
+  ;
 }
 
 @media only screen and (min-width: 1280px) {

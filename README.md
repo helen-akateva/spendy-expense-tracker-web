@@ -178,7 +178,16 @@ This project was created for educational purposes.
 
 ## 👥 Team
 
-Developed by a team of developers as part of an educational project. Backend implementation follows production-oriented architectural principles.
+This project was developed as the final capstone for our Fullstack Development course, showcasing our  of both Backend and Frontend technologies:
+
+👩‍💻 **Olena Akatieva** - Team Lead, Fullstack Developer ([LinkedIn](https://www.linkedin.com/in/olenaakatieva/))
+👨‍💻 **Denis Shulga** - Scrum Master, Fullstack Developer ([LinkedIn](https://www.linkedin.com/in/denis-shullga/))
+👨‍💻 **Roman Kniazhyk** - Fullstack Developer ([LinkedIn](https://www.linkedin.com/in/roman-kniazhyk/))
+👩‍💻 **Faina Kusiaka** - Fullstack Developer ([LinkedIn](https://www.linkedin.com/in/faina-kusiaka-88008838b/))
+👨‍💻 **Anton Shuvalov** - Fullstack Developer ([LinkedIn](https://www.linkedin.com/in/anton-shuvalov38/))
+👩‍💻 **Anastasiia Mamatova** - Fullstack Developer ([LinkedIn](https://www.linkedin.com/in/anastasiia-mamatova/))
+👨‍💻 **Artem Ivanichenko** - Fullstack Developer ([LinkedIn](https://www.linkedin.com/in/artem-ivanichenko/))
+👨‍💻 **Dmytro Kravchenko** - Fullstack Developer ([LinkedIn](https://www.linkedin.com/in/dima-k-bb9386119/))
 
 ## 🙏 Acknowledgments
 
