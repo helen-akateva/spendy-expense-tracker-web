@@ -8,7 +8,7 @@
 .card {
   width: 100%;
   max-width: 300px;
-  background: linear-gradient(180deg, #355f64 0%, #294045 100%);
+  background: linear-gradient(180deg, #355359 0%, #3b5d63 100%);
   border-radius: 20px;
   padding: 16px;
   color: #ffffff;
@@ -71,11 +71,13 @@
   color: #ff6b6b;
   text-align: center;
 }
+
 .illustration {
   width: 234px;
   height: 174px;
 
-  margin: 24px auto 0; /* відступ від таблиці */
+  margin: 24px auto 0;
+  /* відступ від таблиці */
 
   display: flex;
   align-items: center;
@@ -88,6 +90,7 @@
     max-width: 336px;
     width: 336px;
   }
+
   .wrapper {
     display: initial;
     padding: 0;
@@ -111,6 +114,7 @@
     background: transparent;
     margin: 0 auto;
   }
+
   .wrapper {
     display: initial;
     padding: 0;

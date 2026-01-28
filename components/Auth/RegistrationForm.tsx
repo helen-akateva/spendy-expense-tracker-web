@@ -11,6 +11,8 @@ import { Loader } from "@/components/Loader/Loader";
 import { useAuthFormStore } from "@/lib/stores/authFormStore";
 import axios from "axios";
 import { useState } from "react";
+import { RegisterProgressBar } from "./RegisterProgressBar";
+import { getRegisterProgress } from "@/lib/helpers/registerProgress";
 
 interface RegisterFormValues {
   name: string;
@@ -18,16 +20,6 @@ interface RegisterFormValues {
   password: string;
   confirmPassword: string;
 }
-
-const calculatePasswordStrength = (password: string) => {
-  let strength = 0;
-  if (password.length >= 8) strength += 25;
-  if (password.length >= 12) strength += 25;
-  if (/[a-z]/.test(password) && /[A-Z]/.test(password)) strength += 25;
-  if (/\d/.test(password)) strength += 12.5;
-  if (/[^a-zA-Z\d]/.test(password)) strength += 12.5;
-  return Math.min(strength, 100);
-};
 
 export default function RegistrationForm() {
   const router = useRouter();
@@ -58,7 +50,7 @@ export default function RegistrationForm() {
       clear();
 
       toast.success("Account created successfully 🎉");
-      router.replace("/");
+      router.replace("/transactions");
     } catch (error) {
       if (axios.isAxiosError(error)) {
         toast.error(error.response?.data?.message ?? "Login failed");
@@ -77,9 +69,8 @@ export default function RegistrationForm() {
         validationSchema={registerValidationSchema}
         onSubmit={handleSubmit}
       >
-        {({ isSubmitting, values }) => {
-          const passwordStrength = calculatePasswordStrength(values.password);
-
+        {({ isSubmitting, values, errors, touched }) => {
+          const { percent } = getRegisterProgress(values, touched, errors);
           return (
             <Form noValidate className={css.form}>
               {(isSubmitting || isNavigating) && (
@@ -99,12 +90,13 @@ export default function RegistrationForm() {
                     <svg width="24" height="24" className={css.imginput}>
                       <use href="/sprite.svg#icon-user" />
                     </svg>
+
                     <Field name="name">
                       {({ field, meta }: FieldProps) => (
                         <input
                           {...field}
                           type="text"
-                          id="email"
+                          id="name"
                           placeholder="Name"
                           disabled={isSubmitting}
                           suppressHydrationWarning
@@ -127,6 +119,7 @@ export default function RegistrationForm() {
                     <svg width="24" height="24" className={css.imginput}>
                       <use href="/sprite.svg#icon-email" />
                     </svg>
+
                     <Field name="email">
                       {({ field, meta }: FieldProps) => (
                         <input
@@ -155,6 +148,7 @@ export default function RegistrationForm() {
                     <svg width="24" height="24" className={css.imginput}>
                       <use href="/sprite.svg#icon-lock" />
                     </svg>
+
                     <Field name="password">
                       {({ field, meta }: FieldProps) => (
                         <input
@@ -176,24 +170,6 @@ export default function RegistrationForm() {
                     component="div"
                     className={css.error}
                   />
-
-                  {/* ProgressBar */}
-                  {values.password && (
-                    <div className={css.progressbarwrapper}>
-                      <div
-                        className={css.progressbar}
-                        style={{
-                          width: `${passwordStrength}%`,
-                          backgroundColor:
-                            passwordStrength < 50
-                              ? "#ef4444"
-                              : passwordStrength < 75
-                                ? "#f59e0b"
-                                : "#22c55e",
-                        }}
-                      />
-                    </div>
-                  )}
                 </div>
 
                 <div className={css.fieldwrapper}>
@@ -201,6 +177,7 @@ export default function RegistrationForm() {
                     <svg width="24" height="24" className={css.imginput}>
                       <use href="/sprite.svg#icon-lock" />
                     </svg>
+
                     <Field name="confirmPassword">
                       {({ field, meta }: FieldProps) => (
                         <input
@@ -221,6 +198,10 @@ export default function RegistrationForm() {
                     component="div"
                     className={css.error}
                   />
+                </div>
+
+                <div className={css.progressBar}>
+                  <RegisterProgressBar percent={percent} />
                 </div>
 
                 <button

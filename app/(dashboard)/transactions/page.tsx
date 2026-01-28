@@ -23,7 +23,7 @@ export default function TransactionPage() {
     setSelectedTransaction(null);
   };
 
-  const { data } = useQuery<Transaction[]>({
+  const { data, isLoading } = useQuery<Transaction[]>({
     queryKey: ["transactions"],
     queryFn: fetchAllTransactions,
   });
@@ -32,7 +32,8 @@ export default function TransactionPage() {
     <>
       {data && (
         <TransactionsList
-          data={data}
+          data={data || []}
+          isLoading={isLoading}
           setModalType={setModalType}
           setSelectedTransaction={setSelectedTransaction}
         />
