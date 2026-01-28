@@ -49,10 +49,10 @@ const Currency = () => {
         {/* Illustration */}
         <div className={styles.illustration}>
           <Image
-            src="/images/dude1x.webp"
+            src="/images/dude2x.webp"
             alt="Wallet"
-            width={234}
-            height={174}
+            fill // заполняет контейнер
+            className={styles.img}
             priority
           />
         </div>
