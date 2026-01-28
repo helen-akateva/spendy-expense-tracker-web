@@ -16,3 +16,9 @@
     padding-bottom: 320px;
   }
 }
+
+@media screen and (min-width: 1280px) {
+  .wrapper {
+    padding: 0px;
+  }
+}
