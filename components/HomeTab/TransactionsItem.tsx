@@ -1,6 +1,5 @@
-"use client";
-
 import css from "./TransactionsItem.module.css";
+import Tooltip from "../Tooltip/Tooltip";
 import { GoPencil } from "react-icons/go";
 import { ModalType } from "@/app/(dashboard)/transactions/page";
 import { Transaction } from "@/lib/api/transactions";
@@ -116,7 +115,11 @@ const TransactionItem = ({
                     <td className={css.td}>{date}</td>
                     <td className={css.td}>{type === "income" ? "+" : "-"}</td>
                     <td className={css.td}>{category.name}</td>
-                    <td className={css.td}>{comment}</td>
+                    <td className={css.td}>
+                      <Tooltip content={comment || ""}>
+                        <div className={css.comment}>{comment}</div>
+                      </Tooltip>
+                    </td>
                     <td
                       className={css.td}
                       style={{
@@ -188,7 +191,11 @@ const TransactionItem = ({
                   <td className={css.td}>{date}</td>
                   <td className={css.td}>{type === "income" ? "+" : "-"}</td>
                   <td className={css.td}>{category.name}</td>
-                  <td className={css.td}>{comment}</td>
+                  <td className={css.td}>
+                    <Tooltip content={comment || ""}>
+                      <div className={css.comment}>{comment}</div>
+                    </Tooltip>
+                  </td>
                   <td className={css.td}>{amount}</td>
 
                   <td className={`${css.td} ${css.editTd}`}>
