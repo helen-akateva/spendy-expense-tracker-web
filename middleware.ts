@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { checkServerSession } from "./lib/api/serverAuth";
 
 // Публічні маршрути (доступні без авторизації)
 const publicRoutes = ["/login", "/register"];
@@ -8,13 +9,15 @@ const privateRoutes = ["/", "/statistics", "/currency", "/transactions"];
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
+  const origin = request.nextUrl.origin;
 
-  // Отримуємо accessToken з cookies
+  // Отримуємо accessToken refreshToken з cookies
   const accessToken = request.cookies.get("accessToken")?.value;
+  const refreshToken = request.cookies.get("refreshToken")?.value;
 
   // Перевіряємо чи це публічний маршрут
   const isPublicRoute = publicRoutes.some((route) =>
-    pathname.startsWith(route)
+    pathname.startsWith(route),
   );
 
   // Перевіряємо чи це приватний маршрут
@@ -28,37 +31,48 @@ export async function middleware(request: NextRequest) {
 
   // Користувач НЕ авторизований (немає accessToken)
   if (!accessToken) {
+    if (refreshToken) {
+      const cookieHeader = request.headers.get("cookie") ?? "";
+
+      const res = await checkServerSession(origin, cookieHeader);
+
+      if (res.ok) {
+        const response = NextResponse.next();
+
+        // переносимо Set-Cookie з refresh response
+        const setCookie = res.headers.get("set-cookie");
+        if (setCookie) {
+          response.headers.append("set-cookie", setCookie);
+        }
+
+        // якщо це публічний маршрут → редірект на /
+        if (isPublicRoute) {
+          return NextResponse.redirect(new URL("/", request.url), {
+            headers: response.headers,
+          });
+        }
+
+        // якщо приватний → пускаємо
+        if (isPrivateRoute) {
+          return response;
+        }
+      }
+    }
+
+    // ❌ refresh не допоміг
     if (isPrivateRoute) {
-      // Спроба доступу до приватного маршруту без авторизації
-      // Редірект на сторінку логіна
-      console.log(`[Middleware] Unauthorized access to ${pathname}, redirecting to /login`);
       return NextResponse.redirect(new URL("/login", request.url));
     }
 
-    // Доступ до публічного маршруту - дозволяємо
-    if (isPublicRoute) {
-      return NextResponse.next();
-    }
+    return NextResponse.next();
   }
 
-  // Користувач авторизований (є accessToken)
-  if (accessToken) {
-    // Спроба доступу до публічного маршруту (login/register)
-    if (isPublicRoute) {
-      // Редірект на головну сторінку
-      console.log(`[Middleware] Authorized user accessing ${pathname}, redirecting to /`);
-      return NextResponse.redirect(new URL("/", request.url));
-    }
-
-    // Доступ до приватного маршруту - дозволяємо
-    if (isPrivateRoute) {
-      return NextResponse.next();
-    }
+  // ✅ accessToken Є
+  if (accessToken && isPublicRoute) {
+    return NextResponse.redirect(new URL("/", request.url));
   }
 
-  // Якщо маршрут не в списку - редіректимо на login для безпеки
-  console.log(`[Middleware] Unknown route ${pathname}, redirecting to /login`);
-  return NextResponse.redirect(new URL("/login", request.url));
+  return NextResponse.next();
 }
 
 // Налаштування matcher - визначаємо які маршрути обробляє middleware
