@@ -1,6 +1,7 @@
 .headerWrapper {
   background: linear-gradient(180deg, #355359 0%, #3b5d63 100%);
 }
+
 .container {
   display: flex;
   justify-content: space-between;
@@ -77,11 +78,25 @@
   color: var(--main-white);
 }
 
+.userName {
+  max-width: 50px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+@media only screen and (min-width: 768px) {
+  .userName {
+    max-width: none;
+  }
+}
+
 .divider {
   width: 1px;
   height: 30px;
   background-color: #fcfcfc;
 }
+
 .exitBlock {
   display: flex;
   justify-content: center;

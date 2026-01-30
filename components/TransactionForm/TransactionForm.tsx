@@ -132,13 +132,12 @@ export default function TransactionForm({
           <div className={css.fixedWidthGrop}>
             <div className={css.formGrop}>
               <Field
-                className={`${css.input} ${css.fixedWidth} ${
-                  touched.amount
-                    ? errors.amount
-                      ? css.inputError
-                      : css.inputSuccess
-                    : ""
-                }`}
+                className={`${css.input} ${css.fixedWidth} ${touched.amount
+                  ? errors.amount
+                    ? css.inputError
+                    : css.inputSuccess
+                  : ""
+                  }`}
                 name="amount"
                 type="text"
                 placeholder="0.00"
@@ -188,18 +187,18 @@ export default function TransactionForm({
               <DatePicker
                 ref={datePickerRef}
                 open={isOpen}
-                portalId="root-datepicker"
                 dateFormat="dd.MM.yyyy"
-                customInput={<input className={css.input} />}
+                autoComplete="off"
+                customInput={<input type="text" />}
                 onClickOutside={() => setIsOpen(false)}
                 onSelect={() => setIsOpen(false)}
-                className={`${css.input} ${css.fixedWidth}  ${
-                  touched.date
-                    ? errors.date
-                      ? css.inputError
-                      : css.inputSuccess
-                    : ""
-                }`}
+                onInputClick={() => setIsOpen(true)}
+                className={`${css.input} ${css.fixedWidth}  ${touched.date
+                  ? errors.date
+                    ? css.inputError
+                    : css.inputSuccess
+                  : ""
+                  }`}
                 selected={values.date}
                 onChange={(date: Date | null) => setFieldValue("date", date)}
                 maxDate={new Date()}

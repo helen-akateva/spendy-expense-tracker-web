@@ -78,6 +78,14 @@ tbody.desktopTd tr:nth-child(n + 2):nth-child(even) {
   color: #fcfcfc;
 }
 
+.comment {
+  max-width: 90px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin: 0 auto;
+}
+
 .tabletBtnDelete {
   display: none;
 }
