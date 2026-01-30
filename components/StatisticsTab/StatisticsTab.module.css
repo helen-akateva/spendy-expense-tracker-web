@@ -4,7 +4,7 @@
   width: 288px;
   background: linear-gradient(180deg, #355359 0%, #3b5d63 100%);
   margin: 0 auto;
-  margin-top: 33px;
+  /* margin-top: 13px; */
 }
 
 @media only screen and (min-width: 768px) {
