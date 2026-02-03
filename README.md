@@ -4,8 +4,8 @@ Spendy is a modern web application for tracking personal finances, managing expe
 
 ## 🔗 Links
 
-**Live Demo**: Coming soon (Deploy on Vercel/Netlify)  
-**Backend Repository**: [spendy-expence-tracker-api](https://github.com/helen-akateva/spendy-expence-tracker-api)
+**Live Demo**: [https://spendy-expense-tracker-web.vercel.app](https://spendy-expense-tracker-web.vercel.app)  
+**Backend Repository**: [spendy-expence-tracker-api](https://github.com/helen-akateva/spendy-expense-tracker-api)
 
 > **💡 Recommended Topics for GitHub Repository:**  
 > `nextjs` `react` `typescript` `finance-tracker` `expense-tracker` `budget-management` `personal-finance` `zustand` `react-query` `css-modules` `recharts` `formik` `fullstack` `web-application` `responsive-design`
@@ -63,8 +63,8 @@ Spendy helps users:
 
 1. **Clone the repository**
 ```bash
-git clone https://github.com/your-username/web-spendy-expence-tracker.git
-cd web-spendy-expence-tracker
+git clone https://github.com/helen-akateva/spendy-expense-tracker-web.git
+cd spendy-expense-tracker-web
 ```
 
 2. **Install dependencies**
@@ -95,7 +95,7 @@ yarn start
 ## 🏗️ Project Structure
 
 ```
-web-spendy-expence-tracker/
+spendy-expense-tracker-web/
 ├── app/                      # Next.js App Router
 │   ├── (auth)/              # Authentication pages (public routes)
 │   │   ├── login/
