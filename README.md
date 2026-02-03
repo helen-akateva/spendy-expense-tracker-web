@@ -2,6 +2,14 @@
 
 Spendy is a modern web application for tracking personal finances, managing expenses and income, and visualizing financial statistics. Built with Next.js 16 and TypeScript, it provides an intuitive interface for managing your budget across all devices.
 
+## 🔗 Links
+
+**Live Demo**: Coming soon (Deploy on Vercel/Netlify)  
+**Backend Repository**: [spendy-expence-tracker-api](https://github.com/helen-akateva/spendy-expence-tracker-api)
+
+> **💡 Recommended Topics for GitHub Repository:**  
+> `nextjs` `react` `typescript` `finance-tracker` `expense-tracker` `budget-management` `personal-finance` `zustand` `react-query` `css-modules` `recharts` `formik` `fullstack` `web-application` `responsive-design`
+
 ## 📋 About the Project
 
 Spendy helps users:
@@ -13,33 +21,37 @@ Spendy helps users:
 
 ## 🚀 Technologies Used
 
-### Core
-- **Next.js 16.1.3** - React framework with App Router
-- **React 19** - UI library
-- **TypeScript** - Type-safe development
-- **CSS Modules** - Component-scoped styling
+<p align="center">
+  <a href="https://skillicons.dev">
+    <img src="https://skillicons.dev/icons?i=nextjs,react,typescript,css,nodejs" alt="Tech Stack" />
+  </a>
+</p>
+
+### Core Technologies
+
+![Next.js](https://img.shields.io/badge/Next.js-16.1.3-black?style=for-the-badge&logo=next.js&logoColor=white)
+![React](https://img.shields.io/badge/React-19-61DAFB?style=for-the-badge&logo=react&logoColor=black)
+![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?style=for-the-badge&logo=typescript&logoColor=white)
+![CSS Modules](https://img.shields.io/badge/CSS_Modules-000000?style=for-the-badge&logo=css3&logoColor=white)
 
 ### State Management & Data Fetching
-- **Zustand** - Lightweight state management
-- **TanStack Query (React Query)** - Server state management
-- **Axios** - HTTP client
+
+![Zustand](https://img.shields.io/badge/Zustand-5.0.10-593D88?style=for-the-badge)
+![TanStack Query](https://img.shields.io/badge/TanStack_Query-5.90.19-FF4154?style=for-the-badge&logo=reactquery&logoColor=white)
+![Axios](https://img.shields.io/badge/Axios-1.13.2-5A29E4?style=for-the-badge&logo=axios&logoColor=white)
 
 ### Forms & Validation
-- **Formik** - Form management
-- **Yup** - Schema validation
-- **React Datepicker** - Date selection
+
+![Formik](https://img.shields.io/badge/Formik-2.4.9-172B4D?style=for-the-badge)
+![Yup](https://img.shields.io/badge/Yup-1.7.1-orange?style=for-the-badge)
+![React Datepicker](https://img.shields.io/badge/React_Datepicker-9.1.0-216BA5?style=for-the-badge&logo=react&logoColor=white)
 
 ### UI Components & Visualization
-- **Recharts** - Data visualization and charts
-- **React Hot Toast** - Toast notifications
-- **React Loader Spinner** - Loading indicators
-- **React Select** - Enhanced select inputs
-- **React Icons** - Icon library
 
-### Styling
-- **Modern Normalize** - CSS reset
-- **Google Fonts** - Inter & Poppins fonts
-- **CSS Variables** - Consistent theming
+![Recharts](https://img.shields.io/badge/Recharts-3.7.0-22B5BF?style=for-the-badge)
+![React Hot Toast](https://img.shields.io/badge/React_Hot_Toast-2.6.0-FF6B6B?style=for-the-badge)
+![React Select](https://img.shields.io/badge/React_Select-5.10.2-61DAFB?style=for-the-badge&logo=react&logoColor=black)
+![React Icons](https://img.shields.io/badge/React_Icons-5.5.0-E91E63?style=for-the-badge&logo=react&logoColor=white)
 
 ## 📦 Installation and Setup
 
