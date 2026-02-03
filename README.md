@@ -7,9 +7,6 @@ Spendy is a modern web application for tracking personal finances, managing expe
 **Live Demo**: Coming soon (Deploy on Vercel/Netlify)  
 **Backend Repository**: [spendy-expence-tracker-api](https://github.com/helen-akateva/spendy-expence-tracker-api)
 
-> **💡 Recommended Topics for GitHub Repository:**  
-> `nextjs` `react` `typescript` `finance-tracker` `expense-tracker` `budget-management` `personal-finance` `zustand` `react-query` `css-modules` `recharts` `formik` `fullstack` `web-application` `responsive-design`
-
 ## 📋 About the Project
 
 Spendy helps users:
